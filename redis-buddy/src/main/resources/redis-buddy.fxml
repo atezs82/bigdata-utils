@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.zenworks.redis.buddy.MainWindowController">
+<top>
+  <ToolBar prefWidth="200.0" BorderPane.alignment="CENTER">
+  <items><ComboBox fx:id="redisConnectString" editable="true" prefWidth="150.0" /><Button fx:id="connectToRedis" mnemonicParsing="false" onAction="#onConnectToRedis" text="Connect to Redis">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button>
+    <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" /><Button fx:id="addSelectedKey" mnemonicParsing="false" onAction="#onAddRedisKey" text="Add selected">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button><TextField fx:id="specificKey" /><Button mnemonicParsing="false" onAction="#onAddspecific" text="Add specific">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button><Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="8.0" /><Button fx:id="importWatchList" mnemonicParsing="false" onAction="#onImport" text="Import watchlist">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button><Button fx:id="exportWatchList" mnemonicParsing="false" onAction="#onExport" text="Export watchlist">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button>
+  </items>
+<BorderPane.margin>
+<Insets />
+</BorderPane.margin>
+</ToolBar>
+</top>
+<center>
+  <SplitPane dividerPositions="0.2195" focusTraversable="true" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+<children><BorderPane prefHeight="363.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<bottom><ToolBar prefWidth="200.0" BorderPane.alignment="CENTER">
+  <items>
+    <Button fx:id="refreshRedisView" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onRefresh" text="Refresh">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button><Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" /><Label text="Auto refresh in every" /><TextField fx:id="refreshInterval" text="1000" /><Label text="milliseconds" /><Button fx:id="startStopRefresh" mnemonicParsing="false" onAction="#onStartRefresh" text="Start Refresh">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button><CheckBox fx:id="fetchKeys" mnemonicParsing="false" text="Fetch keys (EXPENSIVE)" /><CheckBox fx:id="fetchValues" mnemonicParsing="false" selected="true" text="Fetch values" />
+  </items>
+</ToolBar>
+</bottom>
+<center>
+<ScrollPane prefViewportHeight="696.0" prefViewportWidth="822.0">
+<content><GridPane fx:id="redisView" gridLinesVisible="true" prefHeight="596.0" prefWidth="804.0" BorderPane.alignment="CENTER">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+</GridPane>
+</content>
+</ScrollPane>
+</center></BorderPane>
+</children></AnchorPane>
+  </items>
+<cursor>
+<Cursor fx:constant="DEFAULT" />
+</cursor>
+</SplitPane>
+</center>
+<left><BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+<center><ListView fx:id="redisKeys" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+</center>
+<top><BorderPane prefHeight="25.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+<center><TextField fx:id="filterContent" BorderPane.alignment="CENTER" />
+</center>
+<right><Button fx:id="filterBtn" mnemonicParsing="false" onAction="#onFilterKeys" text="Filter" BorderPane.alignment="CENTER">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button>
+</right></BorderPane>
+</top></BorderPane>
+</left></BorderPane>

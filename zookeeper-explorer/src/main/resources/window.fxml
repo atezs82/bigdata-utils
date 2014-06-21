@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.zenworks.zookeeper.explorer.MainWindowController">
+<top>
+  <ToolBar prefWidth="200.0" BorderPane.alignment="CENTER">
+  <items>
+    <Button fx:id="newButton" contentDisplay="LEFT" mnemonicParsing="false" onAction="#onNew" text="New">
+       <graphic>
+        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@new_64.png" />
+          </image>
+        </ImageView>
+      </graphic>
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+    </Button>
+    <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDelete" text="Delete">
+        <graphic>
+        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@delete_64.png" />
+          </image>
+        </ImageView>
+      </graphic>
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+    </Button>
+    <Button fx:id="onRefresh" mnemonicParsing="false" text="Refresh">
+      <graphic>
+        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@refresh_64.png" />
+          </image>
+        </ImageView>
+      </graphic>
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+    </Button>
+    <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
+    <ComboBox fx:id="zkConnectString" editable="true" prefWidth="150.0" />
+    <Button fx:id="connectButton" mnemonicParsing="false" onAction="#onConnect" text="Connect">
+      <graphic>
+        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@connect_64.png" />
+          </image>
+        </ImageView>
+      </graphic>
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+    </Button>
+    <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
+    <Button mnemonicParsing="false" onAction="#onImport" text="Import">
+      <graphic>
+        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@import_64.png" />
+          </image>
+        </ImageView>
+      </graphic>
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+    </Button>
+    <Button mnemonicParsing="false" onAction="#onExport" text="Export">
+     <graphic>
+        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@export_64.png" />
+          </image>
+        </ImageView>
+      </graphic>
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+    </Button>
+  </items>
+<BorderPane.margin>
+<Insets />
+</BorderPane.margin>
+</ToolBar>
+</top>
+<center>
+  <SplitPane dividerPositions="0.2195" focusTraversable="true" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+    <children>
+       <TreeView fx:id="zkTree" layoutX="-12.0" layoutY="-5.0" prefHeight="363.0" prefWidth="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+<children><BorderPane prefHeight="363.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<center><TextArea fx:id="content" disable="true" minHeight="-Infinity" minWidth="-Infinity" onInputMethodTextChanged="#onContentChange" onKeyTyped="#onContentChange" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+</center>
+<bottom>
+    <FlowPane alignment="BOTTOM_RIGHT" columnHalignment="RIGHT" hgap="5.0" prefHeight="25.0" prefWidth="719.0" vgap="5.0" BorderPane.alignment="CENTER">
+        <children>
+             <ImageView fx:id="contentChange" fitHeight="16.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true" visible="false">
+              <image>
+                  <Image url="@changed_64.png" />
+              </image>
+              <FlowPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+              </FlowPane.margin>
+              </ImageView>
+<Button fx:id="restoreButton" mnemonicParsing="false" onAction="#onRestore" text="Restore">
+    <graphic>
+        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@restore_64.png" />
+          </image>
+        </ImageView>
+      </graphic>
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+
+</Button>
+<Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSave" text="Save">
+    <graphic>
+        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@save_64.png" />
+          </image>
+        </ImageView>
+      </graphic>
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+</Button>
+</children>
+<BorderPane.margin>
+<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+</BorderPane.margin></FlowPane>
+</bottom></BorderPane>
+</children></AnchorPane>
+  </items>
+<cursor>
+<Cursor fx:constant="DEFAULT" />
+</cursor>
+</SplitPane>
+</center></BorderPane>
