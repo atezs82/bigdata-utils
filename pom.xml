@@ -8,9 +8,23 @@
     <packaging>pom</packaging>
 
     <modules>
+    	<module>common-lib</module>
     	<module>redis-buddy</module>
     	<module>zookeeper-explorer</module>
     	<module>bigdata-util-window</module>
     </modules>
-  
+
+    <properties>
+    	<testng.version>6.1.1</testng.version>
+    </properties>
+
+	<dependencies>
+	    <dependency>
+			  <groupId>org.testng</groupId>
+			  <artifactId>testng</artifactId>
+			  <version>${testng.version}</version>
+			  <scope>test</scope>
+		</dependency>
+	</dependencies>
+	 
 </project>

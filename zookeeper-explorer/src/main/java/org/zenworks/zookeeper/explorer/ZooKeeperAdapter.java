@@ -39,6 +39,14 @@ public class ZooKeeperAdapter {
 		}
 	}
 	
+	public boolean isNode(String path) { 
+		try {
+			return curatorFramework.checkExists().forPath(path) != null;
+		} catch (Exception exc) {
+			return false;
+		}
+	}
+	
 	public void deleteNode(String path) {
 		try {
 		   curatorFramework.delete().deletingChildrenIfNeeded().forPath(path);

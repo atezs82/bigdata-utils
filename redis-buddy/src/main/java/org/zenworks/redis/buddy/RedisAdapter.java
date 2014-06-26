@@ -51,11 +51,14 @@ public class RedisAdapter {
 	   return result;
 	}
 	
+	public void delete(final String key) {
+		jedis.del(key);
+	}
+	
 	public String getStringKey(String stringKey) {
 		return jedis.get(stringKey);
 	}
 	
-	// KEY VIEW
 	public void flushAll() {
 		jedis.flushAll();
 	}

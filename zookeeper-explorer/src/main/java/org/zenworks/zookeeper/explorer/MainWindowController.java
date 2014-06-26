@@ -96,6 +96,23 @@ public class MainWindowController implements Initializable {
 	}
 	
 	@FXML
+	private void onClone() {
+		if (pathInTree != INVALID) {
+			String withoutLeaf = pathInTree.substring(0, pathInTree.lastIndexOf("/"));
+			String leafName = pathInTree.substring(pathInTree.lastIndexOf("/")+1, pathInTree.length());
+			
+			int count=1;
+			String newNodeName=leafName+count;
+			while(adapter.isNode(withoutLeaf+"/"+newNodeName)) {
+			   count=count+1;
+			   newNodeName=leafName+count;
+			}
+			adapter.createNode(withoutLeaf + "/" + newNodeName, adapter.getNodeData(pathInTree));
+			refreshTree();
+		}				   
+	}
+	
+	@FXML
 	private void onImport() {
 		 JFileChooser fileChooser = new JFileChooser();
 		 fileChooser.showDialog(null, "Import");
@@ -198,8 +215,10 @@ public class MainWindowController implements Initializable {
 	}
 	
 	private void refreshTree() {
+		int lastSelection = zkTree.getSelectionModel().getSelectedIndex();
 		zkTree.setRoot(createTree("", adapter.getChildren("/")));
 		pathInTree=INVALID;
+		zkTree.getSelectionModel().select(lastSelection);
 	}
 	
 	private TreeItem<ZooKeeperNode> createTree(String path, List<String> elementsUnderneath) {

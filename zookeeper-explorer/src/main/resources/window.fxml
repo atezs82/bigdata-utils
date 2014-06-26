@@ -24,6 +24,18 @@
 <Font name="System Bold" size="12.0" />
 </font>
     </Button>
+    <Button fx:id="cloneButton" contentDisplay="LEFT" mnemonicParsing="false" onAction="#onClone" text="Clone">
+       <graphic>
+        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@new_64.png" />
+          </image>
+        </ImageView>
+      </graphic>
+<font>
+<Font name="System Bold" size="12.0" />
+</font>
+    </Button>
     <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDelete" text="Delete">
         <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">

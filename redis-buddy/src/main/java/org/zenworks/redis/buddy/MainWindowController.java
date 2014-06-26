@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import java.util.TimerTask;
 
 import javax.management.timer.Timer;
+import javax.security.auth.Refreshable;
 import javax.swing.event.HyperlinkEvent.EventType;
 
 import javafx.animation.KeyFrame;
@@ -104,6 +105,22 @@ public class MainWindowController implements Initializable {
 	
     @FXML
     void onRefresh(ActionEvent event) {
+    	refreshRedisKeyList();
+    	refreshRedisWatchList();
+    }
+    
+    @FXML
+    void onDelete(ActionEvent event) {
+    	for (String item:redisKeys.getSelectionModel().getSelectedItems()) {
+    		ownAdapter.delete(item);
+    	}
+    	refreshRedisKeyList();
+    	refreshRedisWatchList();
+    }
+
+    @FXML
+    void onFlushAll(ActionEvent event) {
+    	ownAdapter.flushAll();
     	refreshRedisKeyList();
     	refreshRedisWatchList();
     }

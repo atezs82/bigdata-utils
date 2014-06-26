@@ -20,6 +20,7 @@ public class MainWindowController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		tabPane.getTabs().add(createTab("ZooKeeper", MainWindow.create()));
 		tabPane.getTabs().add(createTab("Redis", org.zenworks.redis.buddy.MainWindow.create()));
+		tabPane.getTabs().add(createTab("Infinispan", new Label("Yet to come")));
 		tabPane.getTabs().add(createTab("Storm", new Label("Yet to come")));
 	}
 	
