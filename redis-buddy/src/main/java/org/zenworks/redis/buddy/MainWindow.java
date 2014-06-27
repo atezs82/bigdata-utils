@@ -14,8 +14,7 @@ public class MainWindow extends Application {
 			if (s.startsWith("--open=")) {
 				Config.redisConnectString=s.split("=")[1].split(";");
 			}
-		}
-		Config.redisConnectString = new String[]{"localhost:6379"};
+		}		
 		launch(args);
     }
     
