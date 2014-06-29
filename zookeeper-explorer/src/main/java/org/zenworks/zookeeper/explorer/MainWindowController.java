@@ -10,6 +10,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
+import org.zenworks.common.Common;
+import org.zenworks.common.ConfigKey;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -45,15 +47,22 @@ public class MainWindowController implements Initializable {
 	
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
- 		for (String favConnect:Config.zkConnectString) {
- 		   zkConnectString.getItems().add(favConnect);
- 		}
+		if (Common.getConfig().isStringArrayConfig(ConfigKey.ZOOKEEPER_FAVORITES)) {
+			String[] zkFavorites = Common.getConfig().getStringArrayConfig(ConfigKey.ZOOKEEPER_FAVORITES); 
+			for (String favConnect:zkFavorites) {
+	 		   zkConnectString.getItems().add(favConnect);
+	 		}
+			
+			if (zkFavorites.length>1) {
+	 		   zkConnectString.getEditor().replaceSelection(zkFavorites[0]);
+	 		   zkConnectString.getSelectionModel().selectFirst();
+	 		   onConnect();
+	 		}
+		}
+		
  		
- 		if (Config.zkConnectString.length>1) {
- 		   zkConnectString.getEditor().replaceSelection(Config.zkConnectString[0]);
- 		   zkConnectString.getSelectionModel().selectFirst();
- 		   onConnect();
- 		}
+ 		
+ 		
  		
  		zkTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<ZooKeeperNode>>() {
 

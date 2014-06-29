@@ -12,6 +12,9 @@ import javax.management.timer.Timer;
 import javax.security.auth.Refreshable;
 import javax.swing.event.HyperlinkEvent.EventType;
 
+import org.zenworks.common.Common;
+import org.zenworks.common.ConfigKey;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.concurrent.Task;
@@ -87,15 +90,19 @@ public class MainWindowController implements Initializable {
     private int MAX_STRING_LENGTH = 125;
     
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		for (String favConnect:Config.redisConnectString) {
-	        redisConnectString.getItems().add(favConnect);
-	 	}
-		
-		if (Config.redisConnectString.length>0) {
-			redisConnectString.getEditor().replaceSelection(Config.redisConnectString[0]);
-			redisConnectString.getSelectionModel().selectFirst();
-	 		onConnectToRedis(null);
+		if (Common.getConfig().isStringArrayConfig(ConfigKey.REDIS_FAVORITES)) {
+			String[] redisFavorites = Common.getConfig().getStringArrayConfig(ConfigKey.REDIS_FAVORITES);
+			for (String favConnect:redisFavorites) {
+		        redisConnectString.getItems().add(favConnect);
+		 	}
+			
+			if (redisFavorites.length>0) {
+				redisConnectString.getEditor().replaceSelection(redisFavorites[0]);
+				redisConnectString.getSelectionModel().selectFirst();
+		 		onConnectToRedis(null);
+			}	
 		}
+		
 		
 		redisKeys.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		

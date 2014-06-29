@@ -2,6 +2,8 @@ package org.zenworks.zookeeper.explorer;
 
 import java.io.IOException;
 
+import org.zenworks.common.Common;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,11 +13,7 @@ import javafx.stage.Stage;
 public class MainWindow extends Application {
 		
 	public static void main(String[] args) {
-		for (String s:args) {
-			if (s.startsWith("--open=")) {
-				Config.zkConnectString=s.split("=")[1].split(";");
-			}
-		}
+		Common.initConfig(args);
         launch(args);
     }
     
