@@ -82,6 +82,9 @@ public class MainWindowController implements Initializable {
     
     @FXML
     private TextField specificKey;
+
+    @FXML
+    private Label numKeys;
     
     private Timeline refreshTask = null;
     
@@ -102,10 +105,8 @@ public class MainWindowController implements Initializable {
 		 		onConnectToRedis(null);
 			}	
 		}
-		
-		
+
 		redisKeys.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		
 		watchList = new ArrayList<String>();
 		
 	}
@@ -154,7 +155,7 @@ public class MainWindowController implements Initializable {
 							refreshRedisWatchList();
 						}
 					}
-	    			
+
 	    		}));
 			refreshTask.setCycleCount(Timeline.INDEFINITE);
 			refreshTask.play();
@@ -210,7 +211,8 @@ public class MainWindowController implements Initializable {
 		 redisKeys.getItems().clear();
 		 for (String key:ownAdapter.getKeys(filterExpression)) {
 		   redisKeys.getItems().add(key);		   
-		 }    	
+		 }
+         numKeys.setText(String.valueOf(redisKeys.getItems().size()));
     }
     
     private void refreshRedisWatchList() {
