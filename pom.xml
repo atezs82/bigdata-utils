@@ -11,6 +11,7 @@
     	<module>common-lib</module>
     	<module>redis-buddy</module>
     	<module>zookeeper-explorer</module>
+        <module>infinispan-inquisitor</module>
     	<module>bigdata-util-window</module>
     </modules>
 

@@ -10,6 +10,13 @@
     <groupId>org.zenworks</groupId>
     <artifactId>infinispan-inquisitor</artifactId>
     <version>0.1-SNAPSHOT</version>
-    
+
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>javafx</artifactId>
+            <version>7.0</version>
+        </dependency>
+    </dependencies>
    
 </project>

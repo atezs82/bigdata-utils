@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.zenworks.redis.buddy.MainWindowController">
+<top>
+  <ToolBar prefWidth="200.0" BorderPane.alignment="CENTER">
+  <items><ComboBox fx:id="ipanHost" editable="true" prefWidth="150.0" /><Button fx:id="connectToIpan" mnemonicParsing="false" onAction="#onConnectToIpan" text="Connect to Infinispan">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button>
+    <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" /><TextField fx:id="ipanKey" /><Button fx:id="queryKey" mnemonicParsing="false" onAction="#onQueryKey" text="Query simple key">
+<font>
+<Font name="System Bold" size="12.0" />
+</font></Button>
+  </items>
+<BorderPane.margin>
+<Insets />
+</BorderPane.margin>
+</ToolBar>
+</top>
+<center><TextArea fx:id="ipanContent" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+</center></BorderPane>
