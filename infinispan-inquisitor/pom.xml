@@ -17,6 +17,19 @@
             <artifactId>javafx</artifactId>
             <version>7.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-client-hotrod</artifactId>
+            <version>5.1.6.FINAL</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.zenworks</groupId>
+            <artifactId>common-lib</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
    
 </project>
