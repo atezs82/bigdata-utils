@@ -30,15 +30,18 @@ public class RedisAdapter {
 	}
 	
 	public List<String> getListContents(String listKey) {
-		long size = jedis.llen(listKey);
 		List<String> result = new ArrayList<String>();
 		
-		for (int index =0;index<size;index++) {
+		for (int index =0;index<getListSize(listKey);index++) {
 			result.add(jedis.lindex(listKey, index));
 		}
 		
 		return result;		
 	}
+
+    public long getListSize(String listKey) {
+        return jedis.llen(listKey);
+    }
 	
 	// MONITOR ABILITY
 	
@@ -50,6 +53,10 @@ public class RedisAdapter {
 	   }
 	   return result;
 	}
+
+    public long getHashSize(String hashKey) {
+        return jedis.hlen(hashKey);
+    }
 	
 	public void delete(final String key) {
 		jedis.del(key);

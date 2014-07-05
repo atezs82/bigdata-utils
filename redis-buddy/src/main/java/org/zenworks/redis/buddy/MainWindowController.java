@@ -105,9 +105,16 @@ public class MainWindowController implements Initializable {
 		 		onConnectToRedis(null);
 			}	
 		}
+        watchList = new ArrayList<String>();
+        if (Common.getConfig().isStringArrayConfig(ConfigKey.REDIS_INITIAL_WATCH_LIST)) {
+            for (String watchListKey:Common.getConfig().getStringArrayConfig(ConfigKey.REDIS_INITIAL_WATCH_LIST)) {
+               watchList.add(watchListKey);
+               refreshRedisWatchList();
+            }
+        }
 
 		redisKeys.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		watchList = new ArrayList<String>();
+
 		
 	}
 	
@@ -222,16 +229,19 @@ public class MainWindowController implements Initializable {
     	   	
     	int rowIndex = 0;
     	for (String key:watchList) {
-    		String keyType = ownAdapter.getType(key); 
+    		String keyType = ownAdapter.getType(key);
+            String size;
     		switch(keyType) {
 	    		case "string":
-	    			redisView.addRow(rowIndex, createRedisKeyLabel(key), createRedisKeyTypeLabel(ownAdapter.getType(key)), createStringKeyNode(ownAdapter.getStringKey(key)), createRemoveButton(rowIndex));
+	    			redisView.addRow(rowIndex, createRedisKeyLabel(key), createRedisKeyTypeLabel(keyType), createStringKeyNode(ownAdapter.getStringKey(key)), createRemoveButton(rowIndex));
 	        		break;
 	    		case "list":
-	    			redisView.addRow(rowIndex, createRedisKeyLabel(key), createRedisKeyTypeLabel(ownAdapter.getType(key)), createListKeyNode(ownAdapter.getListContents(key)),createRemoveButton(rowIndex));
+                    size = " (" + ownAdapter.getListSize(key) + ")";
+	    			redisView.addRow(rowIndex, createRedisKeyLabel(key), createRedisKeyTypeLabel(keyType+size), createListKeyNode(ownAdapter.getListContents(key)),createRemoveButton(rowIndex));
 	        		break;
 	    		case "hash":
-	    			redisView.addRow(rowIndex, createRedisKeyLabel(key), createRedisKeyTypeLabel(ownAdapter.getType(key)), createHashKeyNode(ownAdapter.getHashKey(key)),createRemoveButton(rowIndex));
+                    size = " (" + ownAdapter.getHashSize(key) + ")";
+	    			redisView.addRow(rowIndex, createRedisKeyLabel(key), createRedisKeyTypeLabel(keyType+size), createHashKeyNode(ownAdapter.getHashKey(key)),createRemoveButton(rowIndex));
 	        		break;
 	    		case "none":
 	    			redisView.addRow(rowIndex, createRedisKeyLabel(key), createRedisKeyTypeLabel("<not existing>"), new Label("-"),createRemoveButton(rowIndex));
@@ -280,9 +290,11 @@ public class MainWindowController implements Initializable {
 	private Node createListKeyNode(List<String> listContents) {
 		String result = "";
 		for (String s:listContents) {
-			result=result+"["+s+"]";
+			result=result+"["+s+"]\n";
 		}
-		return new Label(trimToLength(result));
+        Label resultLabel = new Label(result);
+        resultLabel.setWrapText(true);
+		return resultLabel;
 	}
 
 	private Node createRedisKeyTypeLabel(final String type) {
