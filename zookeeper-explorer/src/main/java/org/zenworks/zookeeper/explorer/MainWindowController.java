@@ -127,10 +127,10 @@ public class MainWindowController implements Initializable {
 		 fileChooser.showDialog(null, "Import");
 		 try {
 			 File importFile = fileChooser.getSelectedFile();
-			 String fileContent = FileUtils.readFileToString(importFile);
-			 String importNode = JOptionPane.showInputDialog(null, "What shall be the name of the new node under `"+(pathInTree==INVALID?"/":pathInTree)+"`?");
+             byte[] fileContent = FileUtils.readFileToByteArray(importFile);
+             String importNode = JOptionPane.showInputDialog(null, "What shall be the name of the new node under `"+(pathInTree==INVALID?"/":pathInTree)+"`?");
 		     String targetPath = (pathInTree==INVALID?"/"+importNode:pathInTree+"/"+importNode);
-			 adapter.createNode(targetPath,fileContent);			 
+			 adapter.createNode(targetPath,fileContent);
 			 JOptionPane.showMessageDialog(null, importFile.getAbsolutePath() + " was imported to " + targetPath);
 			 refreshTree();			 
 		 } catch (IOException exc) {
@@ -146,8 +146,8 @@ public class MainWindowController implements Initializable {
 		 File exportFile = fileChooser.getSelectedFile();
 		 if (pathInTree!=INVALID) {
 			 try {
-				 FileUtils.writeStringToFile(exportFile, adapter.getNodeData(pathInTree));
-				 JOptionPane.showMessageDialog(null, pathInTree + " was exported to " + exportFile.getAbsolutePath());				  
+                 FileUtils.writeByteArrayToFile(exportFile, adapter.getNodeDataBytes(pathInTree));
+				 JOptionPane.showMessageDialog(null, pathInTree + " was exported to " + exportFile.getAbsolutePath());
 			 } catch (IOException exc) {
 				 JOptionPane.showMessageDialog(null, "Could not export file.");
 			 }
