@@ -12,7 +12,7 @@
 <top>
   <ToolBar prefWidth="200.0" BorderPane.alignment="CENTER">
   <items>
-    <Button fx:id="newButton" contentDisplay="LEFT" mnemonicParsing="false" onAction="#onNew" text="New">
+    <Button fx:id="newButton" disable="true" contentDisplay="LEFT" mnemonicParsing="false" onAction="#onNew" text="New">
        <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
           <image>
@@ -24,7 +24,7 @@
 <Font name="System Bold" size="12.0" />
 </font>
     </Button>
-    <Button fx:id="cloneButton" contentDisplay="LEFT" mnemonicParsing="false" onAction="#onClone" text="Clone">
+    <Button fx:id="cloneButton" disable="true" contentDisplay="LEFT" mnemonicParsing="false" onAction="#onClone" text="Clone">
        <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
           <image>
@@ -36,7 +36,7 @@
 <Font name="System Bold" size="12.0" />
 </font>
     </Button>
-    <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDelete" text="Delete">
+    <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDelete" text="Delete">
         <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
           <image>
@@ -48,7 +48,7 @@
 <Font name="System Bold" size="12.0" />
 </font>
     </Button>
-    <Button fx:id="onRefresh" mnemonicParsing="false" text="Refresh">
+    <Button fx:id="onRefresh" disable="true" mnemonicParsing="false" text="Refresh">
       <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
           <image>
@@ -75,7 +75,7 @@
 </font>
     </Button>
     <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
-    <Button mnemonicParsing="false" onAction="#onImport" text="Import">
+    <Button  fx:id="importButton" disable="true" mnemonicParsing="false" onAction="#onImport" text="Import">
       <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
           <image>
@@ -87,7 +87,7 @@
 <Font name="System Bold" size="12.0" />
 </font>
     </Button>
-    <Button mnemonicParsing="false" onAction="#onExport" text="Export">
+    <Button  fx:id="exportButton" disable="true" mnemonicParsing="false" onAction="#onExport" text="Export">
      <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
           <image>
@@ -127,7 +127,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
               </FlowPane.margin>
               </ImageView>
-<Button fx:id="restoreButton" mnemonicParsing="false" onAction="#onRestore" text="Restore">
+<Button fx:id="restoreButton" disable="true" mnemonicParsing="false" onAction="#onRestore" text="Restore">
     <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
           <image>
@@ -140,7 +140,7 @@
 </font>
 
 </Button>
-<Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSave" text="Save">
+<Button fx:id="saveButton" disable="true" mnemonicParsing="false" onAction="#onSave" text="Save">
     <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
           <image>
@@ -163,4 +163,15 @@
 <Cursor fx:constant="DEFAULT" />
 </cursor>
 </SplitPane>
-</center></BorderPane>
+</center>
+<bottom>
+    <BorderPane>
+      <left>
+          <Label fx:id="statLabel"/>
+      </left>
+
+    </BorderPane>
+
+
+</bottom>
+</BorderPane>

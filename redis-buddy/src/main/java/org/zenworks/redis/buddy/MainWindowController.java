@@ -39,6 +39,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
+import org.zenworks.gui.GuiUtils;
 
 public class MainWindowController implements Initializable {
 	
@@ -85,7 +86,22 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private Label numKeys;
-    
+
+    @FXML
+    private Button deleteKey;
+
+    @FXML
+    private Button flushAllKeys;
+
+    @FXML
+    private Button addSpecificKeyButton;
+
+    @FXML
+    private Button autoRefLabel;
+
+    @FXML
+    private Button msLabel;
+
     private Timeline refreshTask = null;
     
     List<String> watchList;
@@ -193,7 +209,8 @@ public class MainWindowController implements Initializable {
     @FXML
     void onConnectToRedis(ActionEvent event) {
        ownAdapter = new RedisAdapter(redisConnectString.getEditor().getText().split(":")[0], Integer.valueOf(redisConnectString.getEditor().getText().split(":")[1]));
-       refreshRedisKeyList();       
+       refreshRedisKeyList();
+        GuiUtils.enableControls(filterContent,filterBtn,addSelectedKey,specificKey,deleteKey,flushAllKeys,addSpecificKeyButton,refreshRedisView,refreshInterval,startStopRefresh,fetchKeys,fetchValues,autoRefLabel,msLabel);
     }
     
     @FXML

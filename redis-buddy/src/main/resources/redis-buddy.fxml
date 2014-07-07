@@ -14,16 +14,16 @@
 <font>
 <Font name="System Bold" size="12.0" />
 </font></Button>
-    <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" /><Button fx:id="addSelectedKey" mnemonicParsing="false" onAction="#onAddRedisKey" text="Add selected">
+    <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" /><Button fx:id="addSelectedKey" disable="true" mnemonicParsing="false" onAction="#onAddRedisKey" text="Add selected">
 <font>
 <Font name="System Bold" size="12.0" />
-</font></Button><TextField fx:id="specificKey" /><Button mnemonicParsing="false" onAction="#onAddspecific" text="Add specific">
+</font></Button><TextField fx:id="specificKey" /><Button fx:id="addSpecificKeyButton" disable="true" mnemonicParsing="false" onAction="#onAddspecific" text="Add specific">
 <font>
 <Font name="System Bold" size="12.0" />
-</font></Button><Button fx:id="deleteKey" mnemonicParsing="false" onAction="#onDelete" text="Delete selected">
+</font></Button><Button fx:id="deleteKey" disable="true" mnemonicParsing="false" onAction="#onDelete" text="Delete selected">
 <font>
 <Font name="System Bold" size="12.0" />
-</font></Button><Button fx:id="flushAllKeys" mnemonicParsing="false" onAction="#onFlushAll" text="Flush All Keys">
+</font></Button><Button fx:id="flushAllKeys" disable="true" mnemonicParsing="false" onAction="#onFlushAll" text="Flush All Keys">
 <font>
 <Font name="System Bold" size="12.0" />
 </font></Button>
@@ -41,13 +41,16 @@
 <bottom>
     <ToolBar prefWidth="200.0" BorderPane.alignment="CENTER">
   <items>
-    <Button fx:id="refreshRedisView" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onRefresh" text="Refresh">
+    <Button fx:id="refreshRedisView" alignment="CENTER_RIGHT" disable="true" mnemonicParsing="false" onAction="#onRefresh" text="Refresh">
 <font>
 <Font name="System Bold" size="12.0" />
-</font></Button><Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" /><Label text="Auto refresh in every" /><TextField fx:id="refreshInterval" text="1000" /><Label text="milliseconds" /><Button fx:id="startStopRefresh" mnemonicParsing="false" onAction="#onStartRefresh" text="Start Refresh">
+</font></Button><Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
+      <Label fx:id="autoRefLabel" text="Auto refresh in every" />
+      <TextField fx:id="refreshInterval" disable="true" text="1000" />
+      <Label fx:id="msLabel" text="milliseconds" /><Button fx:id="startStopRefresh" disable="true" mnemonicParsing="false" onAction="#onStartRefresh" text="Start Refresh">
 <font>
 <Font name="System Bold" size="12.0" />
-</font></Button><CheckBox fx:id="fetchKeys" mnemonicParsing="false" text="Fetch keys (EXPENSIVE)" /><CheckBox fx:id="fetchValues" mnemonicParsing="false" selected="true" text="Fetch values" />
+</font></Button><CheckBox fx:id="fetchKeys" disable="true" mnemonicParsing="false" text="Fetch keys (EXPENSIVE)" /><CheckBox fx:id="fetchValues" disable="true" mnemonicParsing="false" selected="true" text="Fetch values" />
   </items>
 </ToolBar>
 </bottom>
@@ -80,12 +83,12 @@
 </SplitPane>
 </center>
 <left><BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-<center><ListView fx:id="redisKeys" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+<center><ListView fx:id="redisKeys" prefHeight="647.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
 </center>
 <top><BorderPane prefHeight="25.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-<center><TextField fx:id="filterContent" BorderPane.alignment="CENTER" />
+<center><TextField fx:id="filterContent" disable="true" BorderPane.alignment="CENTER" />
 </center>
-<right><Button fx:id="filterBtn" mnemonicParsing="false" onAction="#onFilterKeys" text="Filter" BorderPane.alignment="CENTER">
+<right><Button fx:id="filterBtn" disable="true" mnemonicParsing="false" onAction="#onFilterKeys" text="Filter" BorderPane.alignment="CENTER">
 <font>
 <Font name="System Bold" size="12.0" />
 </font></Button>
@@ -93,12 +96,17 @@
 </top>
 <bottom>
     <BorderPane prefHeight="25.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <left>
-            <Label text="Number of keys in cache:" BorderPane.alignment="CENTER" />
-        </left>
         <center>
             <Label fx:id="numKeys" text="" BorderPane.alignment="CENTER" />
         </center>
     </BorderPane>
 </bottom></BorderPane>
-</left></BorderPane>
+</left>
+    <bottom>
+        <BorderPane prefHeight="23.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+        <left>
+                <Label text="Number of keys in cache:" BorderPane.alignment="CENTER" />
+        </left>
+        </BorderPane>
+    </bottom>
+</BorderPane>

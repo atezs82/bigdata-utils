@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import javafx.scene.control.*;
 import org.apache.commons.io.FileUtils;
 import org.zenworks.common.Common;
 import org.zenworks.common.ConfigKey;
@@ -17,13 +18,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
+import org.zenworks.gui.GuiUtils;
 
 public class MainWindowController implements Initializable {
 
@@ -44,7 +41,31 @@ public class MainWindowController implements Initializable {
 	
 	@FXML
 	private ImageView contentChange;
-	
+
+    @FXML
+    Button newButton;
+
+    @FXML
+    Button cloneButton;
+
+    @FXML
+    Button deleteButton;
+
+    @FXML
+    Button onRefresh;
+
+    @FXML
+    Button importButton;
+
+    @FXML
+    Button exportButton;
+
+    @FXML
+    Button restoreButton;
+
+    @FXML
+    Button saveButton;
+
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
 		if (Common.getConfig().isStringArrayConfig(ConfigKey.ZOOKEEPER_FAVORITES)) {
@@ -128,7 +149,7 @@ public class MainWindowController implements Initializable {
 		 try {
 			 File importFile = fileChooser.getSelectedFile();
              byte[] fileContent = FileUtils.readFileToByteArray(importFile);
-             String importNode = JOptionPane.showInputDialog(null, "What shall be the name of the new node under `"+(pathInTree==INVALID?"/":pathInTree)+"`?");
+             String importNode = JOptionPane.showInputDialog(null, "What shall be the name of the new node under `" + (pathInTree == INVALID ? "/" : pathInTree) + "`?");
 		     String targetPath = (pathInTree==INVALID?"/"+importNode:pathInTree+"/"+importNode);
 			 adapter.createNode(targetPath,fileContent);
 			 JOptionPane.showMessageDialog(null, importFile.getAbsolutePath() + " was imported to " + targetPath);
@@ -210,6 +231,7 @@ public class MainWindowController implements Initializable {
 			zkConnectString.getItems().add(zkConnectString.getEditor().getText());
 		}				
 		refreshTree();
+        GuiUtils.enableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton);
 	}
 	
 	private void refreshContent() {
