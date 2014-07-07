@@ -24,6 +24,13 @@
   		   <artifactId>zookeeper-explorer</artifactId>
   		   <version>${project.version}</version>  		  
   		</dependency>
+
+        <dependency>
+            <groupId>org.zenworks</groupId>
+            <artifactId>common-lib</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
   		  		  		
     </dependencies>
   
