@@ -94,18 +94,14 @@
 </font></Button>
 </right></BorderPane>
 </top>
-<bottom>
-    <BorderPane prefHeight="25.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <center>
-            <Label fx:id="numKeys" text="" BorderPane.alignment="CENTER" />
-        </center>
-    </BorderPane>
-</bottom></BorderPane>
+</BorderPane>
 </left>
     <bottom>
         <BorderPane prefHeight="23.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
         <left>
-                <Label text="Number of keys in cache:" BorderPane.alignment="CENTER" />
+            <FlowPane>
+                <Label fx:id="stat" />
+            </FlowPane>
         </left>
         </BorderPane>
     </bottom>
