@@ -12,6 +12,20 @@
 <top>
   <ToolBar prefWidth="200.0" BorderPane.alignment="CENTER">
   <items>
+    <ComboBox fx:id="zkConnectString" editable="true" prefWidth="150.0" />
+    <Button fx:id="connectButton" mnemonicParsing="false" onAction="#onConnect" text="Connect">
+          <graphic>
+              <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                      <Image url="@connect_64.png" />
+                  </image>
+              </ImageView>
+          </graphic>
+          <font>
+              <Font name="System Bold" size="12.0" />
+          </font>
+      </Button>
+    <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
     <Button fx:id="newButton" disable="true" contentDisplay="LEFT" mnemonicParsing="false" onAction="#onNew" text="New">
        <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
@@ -61,20 +75,6 @@
 </font>
     </Button>
     <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
-    <ComboBox fx:id="zkConnectString" editable="true" prefWidth="150.0" />
-    <Button fx:id="connectButton" mnemonicParsing="false" onAction="#onConnect" text="Connect">
-      <graphic>
-        <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
-          <image>
-            <Image url="@connect_64.png" />
-          </image>
-        </ImageView>
-      </graphic>
-<font>
-<Font name="System Bold" size="12.0" />
-</font>
-    </Button>
-    <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
     <Button  fx:id="importButton" disable="true" mnemonicParsing="false" onAction="#onImport" text="Import">
       <graphic>
         <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
@@ -110,7 +110,7 @@
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
     <children>
-       <TreeView fx:id="zkTree" layoutX="-12.0" layoutY="-5.0" prefHeight="363.0" prefWidth="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+       <TreeView fx:id="zkTree" disable="true" layoutX="-12.0" layoutY="-5.0" prefHeight="363.0" prefWidth="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
 <children><BorderPane prefHeight="363.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -169,9 +169,6 @@
       <left>
           <Label fx:id="statLabel"/>
       </left>
-
     </BorderPane>
-
-
 </bottom>
 </BorderPane>

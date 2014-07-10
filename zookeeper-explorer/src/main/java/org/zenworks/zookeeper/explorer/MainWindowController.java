@@ -9,8 +9,12 @@ import java.util.ResourceBundle;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import javafx.concurrent.Task;
 import javafx.scene.control.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.state.ConnectionState;
+import org.apache.curator.framework.state.ConnectionStateListener;
 import org.zenworks.common.Common;
 import org.zenworks.common.ConfigKey;
 
@@ -20,6 +24,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
+import org.zenworks.gui.DialogBox;
+import org.zenworks.gui.DialogResult;
 import org.zenworks.gui.GuiUtils;
 
 public class MainWindowController implements Initializable {
@@ -29,6 +35,9 @@ public class MainWindowController implements Initializable {
 	
 	@FXML
 	private TextArea content;
+
+    @FXML
+    private Button connectButton;
 	
 	@FXML
 	private ComboBox<String> zkConnectString;
@@ -65,6 +74,9 @@ public class MainWindowController implements Initializable {
 
     @FXML
     Button saveButton;
+
+    @FXML
+    Label statLabel;
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
@@ -114,6 +126,7 @@ public class MainWindowController implements Initializable {
 		});
 		zkTree.setEditable(false);      
 		content.setDisable(false);
+        statLabel.setText("Not connected.");
 		
 	}
 	
@@ -209,7 +222,7 @@ public class MainWindowController implements Initializable {
 
 	@FXML
 	private void onRefresh() {
-		refreshTree();		
+        refreshTree();
 	}
 	
 	@FXML
@@ -225,13 +238,47 @@ public class MainWindowController implements Initializable {
 	}
 			
 	@FXML
-	private void onConnect() {	
-		adapter = new ZooKeeperAdapter(zkConnectString.getEditor().getText());
-		if (!zkConnectString.getItems().contains(zkConnectString.getEditor().getText())) {
-			zkConnectString.getItems().add(zkConnectString.getEditor().getText());
-		}				
-		refreshTree();
-        GuiUtils.enableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton);
+	private void onConnect() {
+        connectButton.setDisable(true);
+        final String zkAddress = zkConnectString.getEditor().getText();
+        statLabel.setText("Connecting to " + zkAddress + "...");
+        if (adapter!=null) {
+            adapter.disconnect();
+        }
+        adapter = new ZooKeeperAdapter(zkAddress, new ConnectionStateListener() {
+            @Override
+            public void stateChanged(CuratorFramework curatorFramework, ConnectionState connectionState) {
+               if (connectionState == ConnectionState.CONNECTED || connectionState == ConnectionState.RECONNECTED) {
+                   refreshTree();
+                   statLabel.setText("Restored connection to ZooKeeper at " + zkAddress + ".");
+               } else if (connectionState == ConnectionState.LOST || connectionState == ConnectionState.SUSPENDED) {
+                   GuiUtils.disableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, zkTree, content);
+                   statLabel.setText("Lost connection to ZooKeeper at " + zkAddress + ". Please connect again.");
+               }
+            }
+        });
+        new Thread(new Task() {
+
+            @Override
+            protected Object call() throws Exception {
+                adapter.init();
+                if (adapter.isReady()) {
+                    refreshTree();
+                    statLabel.setText("Connected to ZooKeeper at " + zkConnectString.getEditor().getText() + ".");
+                } else {
+                    statLabel.setText("ZooKeeper connection towards " + zkConnectString.getEditor().getText() + " got timed out.");
+                }
+
+
+                    connectButton.setDisable(false);
+                return null;
+            }
+        }).run();
+
+		if (!zkConnectString.getItems().contains(zkAddress)) {
+			zkConnectString.getItems().add(zkAddress);
+		}
+
 	}
 	
 	private void refreshContent() {
@@ -246,10 +293,13 @@ public class MainWindowController implements Initializable {
 	}
 	
 	private void refreshTree() {
-		int lastSelection = zkTree.getSelectionModel().getSelectedIndex();
+
+        int lastSelection = zkTree.getSelectionModel().getSelectedIndex();
 		zkTree.setRoot(createTree("", adapter.getChildren("/")));
 		pathInTree=INVALID;
 		zkTree.getSelectionModel().select(lastSelection);
+        GuiUtils.enableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, zkTree, content);
+
 	}
 	
 	private TreeItem<ZooKeeperNode> createTree(String path, List<String> elementsUnderneath) {

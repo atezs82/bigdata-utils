@@ -5,15 +5,34 @@ import java.util.List;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.CuratorEvent;
+import org.apache.curator.framework.api.CuratorListener;
+import org.apache.curator.framework.state.ConnectionState;
+import org.apache.curator.framework.state.ConnectionStateListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.curator.retry.RetryOneTime;
 
 public class ZooKeeperAdapter {
 
     CuratorFramework curatorFramework;
+    final String connectString;
+    final ConnectionStateListener listener;
 
-    public ZooKeeperAdapter(final String connectString) {
-        curatorFramework = CuratorFrameworkFactory.builder().connectString(connectString).retryPolicy(new ExponentialBackoffRetry(1000, 3)).build();
+
+    public ZooKeeperAdapter(final String connectString, final ConnectionStateListener listener) {
+        this.connectString = connectString;
+        this.listener = listener;
+    }
+
+    public void init() {
+        curatorFramework = CuratorFrameworkFactory.builder().connectString(connectString).retryPolicy(new ExponentialBackoffRetry(1000,3)).build();
+        curatorFramework.getConnectionStateListenable().addListener(listener);
         curatorFramework.start();
+        try {
+            curatorFramework.getZookeeperClient().blockUntilConnectedOrTimedOut();
+        } catch (Exception exc) {
+
+        }
     }
 
     public List<String> getChildren(String node) {
@@ -81,6 +100,14 @@ public class ZooKeeperAdapter {
         }
     }
 
+    public void disconnect() {
+        try {
+            curatorFramework.close();
+        } catch (Exception e) {
+
+        }
+    }
+
     public void setNodeData(String path, byte[] data) {
         try {
             curatorFramework.setData().forPath(path, data);
@@ -95,5 +122,10 @@ public class ZooKeeperAdapter {
         } catch (Exception exc) {
             return new byte[]{};
         }
+    }
+
+
+    public boolean isReady() {
+        return curatorFramework.getZookeeperClient().isConnected();
     }
 }
