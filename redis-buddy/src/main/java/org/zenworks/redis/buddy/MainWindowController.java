@@ -10,8 +10,11 @@ import java.util.TimerTask;
 
 import javax.management.timer.Timer;
 import javax.security.auth.Refreshable;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent.EventType;
 
+import javafx.geometry.Orientation;
+import javafx.scene.layout.*;
 import org.zenworks.common.Common;
 import org.zenworks.common.ConfigKey;
 
@@ -31,10 +34,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -85,7 +84,7 @@ public class MainWindowController implements Initializable {
     private TextField specificKey;
 
     @FXML
-    private Label numKeys;
+    private Label stat;
 
     @FXML
     private Button deleteKey;
@@ -97,10 +96,10 @@ public class MainWindowController implements Initializable {
     private Button addSpecificKeyButton;
 
     @FXML
-    private Button autoRefLabel;
+    private Label autoRefLabel;
 
     @FXML
-    private Button msLabel;
+    private Label msLabel;
 
     private Timeline refreshTask = null;
     
@@ -163,26 +162,27 @@ public class MainWindowController implements Initializable {
     		startStopRefresh.setText("Start refresh");
     		refreshTask=null;
     	} else {
-	    	int duration=1000;
 	    	try {
-	    		duration = Integer.valueOf(refreshInterval.getText());    		
-	    	} catch (NumberFormatException exc) {    		
-	    	}
-	    	refreshTask = new Timeline(new KeyFrame(Duration.millis(duration), new EventHandler<ActionEvent>() {
-	
-					public void handle(ActionEvent arg0) {
-						if (fetchKeys.isSelected()) {
-							refreshRedisKeyList();
-						}
-						if (fetchValues.isSelected()) {
-							refreshRedisWatchList();
-						}
-					}
+	    		int duration = Integer.valueOf(refreshInterval.getText());
+                refreshTask = new Timeline(new KeyFrame(Duration.millis(duration), new EventHandler<ActionEvent>() {
 
-	    		}));
-			refreshTask.setCycleCount(Timeline.INDEFINITE);
-			refreshTask.play();
-			startStopRefresh.setText("Stop refresh");
+                    public void handle(ActionEvent arg0) {
+                        if (fetchKeys.isSelected()) {
+                            refreshRedisKeyList();
+                        }
+                        if (fetchValues.isSelected()) {
+                            refreshRedisWatchList();
+                        }
+                    }
+
+                }));
+                refreshTask.setCycleCount(Timeline.INDEFINITE);
+                refreshTask.play();
+                startStopRefresh.setText("Stop refresh");
+	    	} catch (NumberFormatException exc) {
+                JOptionPane.showMessageDialog(null, "Cannot start refresh, " + refreshInterval.getText() + " is not an integer number.");
+            }
+
     	}
     	
     }
@@ -236,7 +236,7 @@ public class MainWindowController implements Initializable {
 		 for (String key:ownAdapter.getKeys(filterExpression)) {
 		   redisKeys.getItems().add(key);		   
 		 }
-         numKeys.setText(String.valueOf(redisKeys.getItems().size()));
+         stat.setText("Connected to Redis. Number of keys in cache: "+String.valueOf(redisKeys.getItems().size()));
     }
     
     private void refreshRedisWatchList() {
@@ -266,7 +266,10 @@ public class MainWindowController implements Initializable {
 	    	}
 			rowIndex = rowIndex + 1;
     	}
-    	redisView.getRowConstraints().add(new RowConstraints(20));
+        RowConstraints rowConstraints = new RowConstraints();
+        rowConstraints.setVgrow(Priority.ALWAYS);
+        rowConstraints.setFillHeight(true);
+    	redisView.getRowConstraints().add(rowConstraints);
     	
     	ColumnConstraints colConstraints = new ColumnConstraints();
     	colConstraints.setHgrow(Priority.ALWAYS);
@@ -276,7 +279,7 @@ public class MainWindowController implements Initializable {
     }
     
     private Node createRemoveButton(final int key) {
-		Button removeButton = new Button("X");
+		Button removeButton = new Button("Del");
 		removeButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
 
 			@Override
@@ -305,13 +308,11 @@ public class MainWindowController implements Initializable {
 	}
 
 	private Node createListKeyNode(List<String> listContents) {
-		String result = "";
+        FlowPane listPane = new FlowPane(Orientation.VERTICAL);
 		for (String s:listContents) {
-			result=result+"["+s+"]\n";
+            listPane.getChildren().add(new Label("["+s+"]"));
 		}
-        Label resultLabel = new Label(result);
-        resultLabel.setWrapText(true);
-		return resultLabel;
+		return listPane;
 	}
 
 	private Node createRedisKeyTypeLabel(final String type) {
