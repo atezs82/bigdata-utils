@@ -9,7 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
- 
+import javafx.scene.image.Image;
+import org.zenworks.gui.DialogBox;
+
 public class MainWindow extends Application {
 		
 	public static void main(String[] args) {
@@ -24,6 +26,7 @@ public class MainWindow extends Application {
         Scene scene = new Scene(root);
     
         stage.setTitle("Zookeeper explorer");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
         stage.setScene(scene);        
         stage.show();
     }

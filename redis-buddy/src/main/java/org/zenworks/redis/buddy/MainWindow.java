@@ -2,6 +2,7 @@ package org.zenworks.redis.buddy;
 
 import java.io.IOException;
 
+import javafx.scene.image.Image;
 import org.zenworks.common.Common;
 
 import javafx.application.Application;
@@ -22,6 +23,7 @@ public class MainWindow extends Application {
     	Scene scene = new Scene(create());
     
         stage.setTitle("Redis buddy");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
         stage.setScene(scene);        
         stage.show();
     }
