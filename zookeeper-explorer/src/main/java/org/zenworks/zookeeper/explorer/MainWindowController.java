@@ -165,10 +165,10 @@ public class MainWindowController implements Initializable {
              String importNode = JOptionPane.showInputDialog(null, "What shall be the name of the new node under `" + (pathInTree == INVALID ? "/" : pathInTree) + "`?");
 		     String targetPath = (pathInTree==INVALID?"/"+importNode:pathInTree+"/"+importNode);
 			 adapter.createNode(targetPath,fileContent);
-			 JOptionPane.showMessageDialog(null, importFile.getAbsolutePath() + " was imported to " + targetPath);
+             DialogBox.showConfirmationDialog(importFile.getAbsolutePath() + " was imported to " + targetPath);
 			 refreshTree();			 
 		 } catch (IOException exc) {
-			 JOptionPane.showMessageDialog(null, "Could not import file.");
+             DialogBox.showConfirmationDialog("Could not import file.");
 		 }	 
 	   
 	}
@@ -181,9 +181,9 @@ public class MainWindowController implements Initializable {
 		 if (pathInTree!=INVALID) {
 			 try {
                  FileUtils.writeByteArrayToFile(exportFile, adapter.getNodeDataBytes(pathInTree));
-				 JOptionPane.showMessageDialog(null, pathInTree + " was exported to " + exportFile.getAbsolutePath());
+                 DialogBox.showConfirmationDialog(pathInTree + " was exported to " + exportFile.getAbsolutePath());
 			 } catch (IOException exc) {
-				 JOptionPane.showMessageDialog(null, "Could not export file.");
+                 DialogBox.showConfirmationDialog("Could not export file.");
 			 }
 		 }
 		
@@ -198,7 +198,7 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void onRestore() {
 		if (pathInTree!=INVALID && contentChange.isVisible()) {
-			if (JOptionPane.showConfirmDialog(null, "Do you want to restore the original content of `"+pathInTree+"`?", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+			if (DialogBox.showConfirmationDialog("Do you want to restore the original content of `"+pathInTree+"`?") == DialogResult.YES) {
 				refreshContent();
 				contentChange.setVisible(false);
 			}
@@ -212,10 +212,10 @@ public class MainWindowController implements Initializable {
 		  if (contentChange.isVisible()) {
 			  adapter.setNodeData(pathInTree, content.getText());
 			  contentChange.setVisible(false);
-			  JOptionPane.showMessageDialog(null, "Saved " + content.getText().getBytes().length + " bytes to " + pathInTree);			 
+              DialogBox.showMessageDialog("Saved " + content.getText().getBytes().length + " bytes to " + pathInTree);
 		  }
 		  else {
-			  JOptionPane.showMessageDialog(null, "No change. Content not saved.");
+              DialogBox.showMessageDialog("No change. Content not saved.");
 		  }
 	   }
 	}	
@@ -228,7 +228,7 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void onDelete() {
 		if (pathInTree!=INVALID) {
-	       if (JOptionPane.showConfirmDialog(null, "Do you want to delete node `"+pathInTree+"` and all nodes underneath?", "Confirmation", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+	       if (DialogBox.showConfirmationDialog("Do you want to delete node `"+pathInTree+"` and all nodes underneath?")==DialogResult.YES) {
 		       adapter.deleteNode(pathInTree);
 		       pathInTree=INVALID;
 		       refreshTree();
