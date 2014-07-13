@@ -6,21 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
-import java.util.TimerTask;
 
-import javax.management.timer.Timer;
-import javax.security.auth.Refreshable;
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent.EventType;
 
 import javafx.geometry.Orientation;
 import javafx.scene.layout.*;
 import org.zenworks.common.Common;
-import org.zenworks.common.ConfigKey;
+import org.zenworks.common.config.ConfigKey;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -33,10 +28,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 import org.zenworks.gui.GuiUtils;
 
@@ -236,7 +227,7 @@ public class MainWindowController implements Initializable {
 		 for (String key:ownAdapter.getKeys(filterExpression)) {
 		   redisKeys.getItems().add(key);		   
 		 }
-         stat.setText("Connected to Redis. Number of keys in cache: "+String.valueOf(redisKeys.getItems().size()));
+         stat.setText("Connected to Redis at " + ownAdapter.getRedisHost() + ". Number of keys in cache: "+String.valueOf(redisKeys.getItems().size()));
     }
     
     private void refreshRedisWatchList() {

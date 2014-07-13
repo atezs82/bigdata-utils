@@ -11,9 +11,12 @@ import redis.clients.jedis.Jedis;
 public class RedisAdapter {
 		
 	Jedis jedis;
+
+    String redisHostPort;
 	
 	public RedisAdapter(final String host, int port) {		
-		jedis = new Jedis(host, port);		
+		jedis = new Jedis(host, port);
+        redisHostPort = host+":"+port;
 	}
 	
 	public List<String> getKeys() {		
@@ -69,4 +72,8 @@ public class RedisAdapter {
 	public void flushAll() {
 		jedis.flushAll();
 	}
+
+    public String getRedisHost() {
+       return redisHostPort;
+    }
 }
