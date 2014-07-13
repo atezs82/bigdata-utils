@@ -10,8 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.zenworks.common.module.FrameworkModule;
 
-public class MainWindow extends Application {
+public class MainWindow extends Application implements FrameworkModule {
 	
 	public static void main(String[] args) {
 		Common.initConfig(args);
@@ -20,21 +21,30 @@ public class MainWindow extends Application {
     
     @Override
     public void start(Stage stage) throws IOException {
-    	Scene scene = new Scene(create());
+    	Scene scene = new Scene(getInterface());
     
-        stage.setTitle("Redis buddy");
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
+        stage.setTitle(getName());
+        stage.getIcons().add(getIcon());
         stage.setScene(scene);        
         stage.show();
     }
     
-    public static Parent create() {
-    	try {
-			return FXMLLoader.load(new MainWindow().getClass().getResource("/redis-buddy.fxml"));
-		} catch (IOException e) {
-		   return null;
-		}    	
-        
+    @Override
+    public Parent getInterface() {
+        try {
+            return FXMLLoader.load(new MainWindow().getClass().getResource("/redis-buddy.fxml"));
+        } catch (IOException e) {
+            return null;
+        }
     }
 
+    @Override
+    public Image getIcon() {
+        return new Image(getClass().getResourceAsStream("/redisbuddyicon.png"));
+    }
+
+    @Override
+    public String getName() {
+        return "Redis Buddy";
+    }
 }

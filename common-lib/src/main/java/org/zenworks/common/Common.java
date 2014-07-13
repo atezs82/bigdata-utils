@@ -26,7 +26,7 @@ public class Common {
 			}			
 		}
 		
-		config= configFactory.createConfig();
+		config = configFactory.createConfig();
 		
 		return config;
 	}

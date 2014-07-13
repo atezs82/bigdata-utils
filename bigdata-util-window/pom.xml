@@ -27,6 +27,12 @@
 
         <dependency>
             <groupId>org.zenworks</groupId>
+            <artifactId>infinispan-inquisitor</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.zenworks</groupId>
             <artifactId>common-lib</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -3,6 +3,12 @@ package org.zenworks.bigdata.util;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.zenworks.common.config.Config;
+import org.zenworks.common.module.FrameworkModule;
+import org.zenworks.infinispan.inquisitor.InfinispanMainWindow;
 import org.zenworks.zookeeper.explorer.MainWindow;
 
 import javafx.fxml.FXML;
@@ -18,17 +24,23 @@ public class MainWindowController implements Initializable {
 	TabPane tabPane;
 	
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		tabPane.getTabs().add(createTab("ZooKeeper", MainWindow.create()));
-		tabPane.getTabs().add(createTab("Redis", org.zenworks.redis.buddy.MainWindow.create()));
-		tabPane.getTabs().add(createTab("Infinispan", new Label("Yet to come")));
-		tabPane.getTabs().add(createTab("Storm", new Label("Yet to come")));
+        FrameworkModule[] modules = new FrameworkModule[]{ new MainWindow(), new org.zenworks.redis.buddy.MainWindow(), new InfinispanMainWindow() };
+
+        for (FrameworkModule fm : modules) {
+            tabPane.getTabs().add(createTab(fm.getName(), fm.getIcon(), fm.getInterface()));
+        }
+
 	}
 	
-	private Tab createTab(final String caption, final Parent content) {
+	private Tab createTab(final String caption, final Image icon, final Parent content) {
 		Tab tab = new Tab();
-		tab.setText(caption);		
+		tab.setText(caption);
+        ImageView iconView = new ImageView(icon);
+        iconView.setPreserveRatio(true);
+        iconView.setFitWidth(20.0);
+        tab.setGraphic(iconView);
 	    tab.setContent(content);
-		
+
 		return tab;
 	}
 	

@@ -7,10 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.zenworks.common.Common;
+import org.zenworks.common.module.FrameworkModule;
 
 import java.io.IOException;
 
-public class InfinispanMainWindow extends Application {
+public class InfinispanMainWindow extends Application implements FrameworkModule {
 
     public static void main(String[] args) {
         Common.initConfig(args);
@@ -19,21 +20,30 @@ public class InfinispanMainWindow extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Scene scene = new Scene(create());
+        Scene scene = new Scene(getInterface());
 
-        stage.setTitle("Infinispan Inquisitor");
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
+        stage.setTitle(getName());
+        stage.getIcons().add(getIcon());
         stage.setScene(scene);
         stage.show();
     }
 
-    public static Parent create() {
+    @Override
+    public Parent getInterface() {
         try {
             return FXMLLoader.load(new InfinispanMainWindow().getClass().getResource("/ipan.fxml"));
         } catch (IOException e) {
             return null;
         }
-
     }
 
+    @Override
+    public Image getIcon() {
+        return new Image(getClass().getResourceAsStream("/infinispaninquisitoricon.png"));
+    }
+
+    @Override
+    public String getName() {
+        return "Infinispan Inquisitor";
+    }
 }

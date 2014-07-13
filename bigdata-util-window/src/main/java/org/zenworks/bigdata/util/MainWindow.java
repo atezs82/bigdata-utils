@@ -4,7 +4,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.zenworks.common.Common;
+import org.zenworks.common.config.Config;
 
 public class MainWindow extends Application {
 
@@ -15,8 +18,10 @@ public class MainWindow extends Application {
         
         Scene scene = new Scene(root);
     
-        arg0.setTitle("BigData Util");
-        arg0.setScene(scene);        
+        arg0.setTitle("Bigdata Util Framework");
+        arg0.getIcons().add(new Image(getClass().getResourceAsStream("/frameworkmainicon.png")));
+        arg0.setScene(scene);
+
         arg0.show();
         
         
@@ -24,7 +29,8 @@ public class MainWindow extends Application {
 	}
 
 	public static void main(String[] args) {
-		launch(args);
+        Common.initConfig(args);
+        launch(args);
 
 	}
 

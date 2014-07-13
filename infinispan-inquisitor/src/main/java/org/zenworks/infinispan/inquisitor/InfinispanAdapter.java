@@ -24,6 +24,7 @@ public class InfinispanAdapter {
         RemoteCacheManager cacheContainer = new RemoteCacheManager(infinispanHost);
         cacheContainer.start();
         cache = cacheContainer.getCache(cacheName);
+        this.infinispanHost = infinispanHost;
     }
 
     public Object getKey(Object key) {
