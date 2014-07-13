@@ -16,7 +16,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.state.ConnectionState;
 import org.apache.curator.framework.state.ConnectionStateListener;
 import org.zenworks.common.Common;
-import org.zenworks.common.ConfigKey;
+import org.zenworks.common.config.ConfigKey;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -133,10 +133,14 @@ public class MainWindowController implements Initializable {
 		
 	@FXML
 	private void onNew() {
-	   String root = (pathInTree==INVALID?"/":pathInTree+"/");	   
-	   adapter.createNode(root+JOptionPane.showInputDialog(null, "Enter the name of the node to create under `"+root+"`:"),"");	   
-	   refreshTree();	   
-	}
+	   String rootWithSlash = (pathInTree==INVALID?"/":pathInTree+"/");
+       String newNode = DialogBox.showQueryDialog("Enter the name of the node to create under `"+rootWithSlash+"`:");
+       if (newNode != null) {
+           adapter.createNode(rootWithSlash+newNode,"");
+           refreshTree();
+           DialogBox.showMessageDialog(rootWithSlash+newNode+" created successfully.");
+       }
+    }
 	
 	@FXML
 	private void onClone() {
