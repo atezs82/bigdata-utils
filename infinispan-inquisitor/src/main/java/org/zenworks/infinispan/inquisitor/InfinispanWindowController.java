@@ -1,14 +1,17 @@
 package org.zenworks.infinispan.inquisitor;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.util.Duration;
 import org.infinispan.client.hotrod.ServerStatistics;
+import org.zenworks.gui.DialogBox;
 import org.zenworks.gui.GuiUtils;
 
+import java.util.Date;
 import java.util.Map;
 
 import static org.zenworks.gui.GuiUtils.*;
@@ -39,18 +42,67 @@ public class InfinispanWindowController {
     @FXML
     private Label statLabel;
 
+    @FXML
+    private Label numOfEntries;
+
+    @FXML
+    private Label cacheMisses;
+
+    @FXML
+    private Label cacheRemovalMisses;
+
+    @FXML
+    private Label cacheStores;
+
+    @FXML
+    private Label cacheRemovalHits;
+
+    @FXML
+    private Label cacheHits;
+
+    @FXML
+    private Label serverUptime;
+
+    @FXML
+    private TextField refreshStatInterval;
+
+    @FXML
+    private Label cacheRetrievals;
+
+    @FXML
+    private Button refreshStatButton;
+
     InfinispanAdapter infinispanConnection;
+
+    private Timeline refreshTask = null;
 
     @FXML
     void initialize() {
-        statLabel.setText("Not connected.");
+        onRefreshStats(null);
     }
 
     @FXML
     void onConnectToIpan(ActionEvent event) {
         infinispanConnection = new InfinispanAdapter(ipanHost.getEditor().getText());
-        enableControls(queryButton, ipanKey, refreshButton);
+        enableControls(queryButton, ipanKey, refreshButton,ipanContent);
         onRefreshStats(null);
+        infinispanConnection.setKey("Toth","Attila");
+        infinispanConnection.setKey("Toth2","Attila2");
+        infinispanConnection.setKey("Toth33","Attila33");
+    }
+
+    @FXML
+    void onQueryKey() {
+        String queryKey = ipanKey.getEditor().getText();
+        Object value = infinispanConnection.getKey(queryKey);
+        if (value==null) {
+            DialogBox.showMessageDialog("Key `"+queryKey+"` could not be found in Infinispan.");
+        } else {
+            ipanContent.setText((String) value);
+        }
+        if (!ipanKey.getItems().contains(queryKey)) {
+           ipanKey.getItems().add(queryKey);
+        }
     }
 
     @FXML
@@ -64,28 +116,51 @@ public class InfinispanWindowController {
     }
 
     @FXML
+    void onRefreshStatIval(ActionEvent event) {
+
+        if (refreshTask == null) {
+
+            int duration = Integer.valueOf(refreshStatInterval.getText());
+            refreshTask = new Timeline(new KeyFrame(Duration.millis(duration), new EventHandler<ActionEvent>() {
+
+                public void handle(ActionEvent arg0) {
+                   onRefreshStats(null);
+                }
+            }));
+            refreshTask.setCycleCount(Timeline.INDEFINITE);
+            refreshTask.play();
+            refreshButton.setText("STOP");
+        } else {
+            refreshTask.stop();
+            refreshTask = null;
+            refreshButton.setText("Start");
+        }
+
+    }
+
+    @FXML
     void onRefreshStats(ActionEvent event) {
        if (infinispanConnection != null) {
-           StringBuilder infinispanStatus = new StringBuilder();
            Map<String,String> props = infinispanConnection.getStats();
-           infinispanStatus.append("Infinispan happily serving: ");
-           infinispanStatus.append(props.get(ServerStatistics.CURRENT_NR_OF_ENTRIES));
-           infinispanStatus.append(" number of entries. Hits/misses/remove-hits/remove-misses: ");
-           infinispanStatus.append(props.get(ServerStatistics.HITS));
-           infinispanStatus.append("/");
-           infinispanStatus.append(props.get(ServerStatistics.MISSES));
-           infinispanStatus.append("/");
-           infinispanStatus.append(props.get(ServerStatistics.REMOVE_HITS));
-           infinispanStatus.append("/");
-           infinispanStatus.append(props.get(ServerStatistics.REMOVE_MISSES));
-           infinispanStatus.append(" Retrieval/Store ratio: ");
-           infinispanStatus.append(props.get(ServerStatistics.RETRIEVALS));
-           infinispanStatus.append("/");
-           infinispanStatus.append(props.get(ServerStatistics.STORES));
-           infinispanStatus.append(". Server uptime: ");
-           infinispanStatus.append(props.get(ServerStatistics.TIME_SINCE_START));
-           infinispanStatus.append(" seconds.");
-           statLabel.setText(infinispanStatus.toString());
+           numOfEntries.setText("Infinispan happily serving: " + props.get(ServerStatistics.CURRENT_NR_OF_ENTRIES) + " number of entries.");
+           cacheHits.setText("Cache hits: " + props.get(ServerStatistics.HITS));
+           cacheMisses.setText("Cache misses: " + props.get(ServerStatistics.MISSES));
+           cacheRemovalHits.setText("Remove hits: " + props.get(ServerStatistics.REMOVE_HITS));
+           cacheRemovalMisses.setText("Remove misses: " + props.get(ServerStatistics.REMOVE_MISSES));
+           cacheRetrievals.setText("Retrievals: "+props.get(ServerStatistics.RETRIEVALS));
+           cacheStores.setText("Stores: "+props.get(ServerStatistics.STORES));
+           serverUptime.setText("Server uptime: " + props.get(ServerStatistics.TIME_SINCE_START));
+           statLabel.setText("Connected to Infinispan at "+infinispanConnection.getHost()+". Stats refreshed at " + new Date().toString());
+       } else {
+           numOfEntries.setText("Infinispan happily serving: ? number of entries.");
+           cacheHits.setText("Cache hits: ?");
+           cacheMisses.setText("Cache misses: ?");
+           cacheRemovalHits.setText("Remove hits: ?");
+           cacheRemovalMisses.setText("Remove misses: ?");
+           cacheRetrievals.setText("Retrievals: ?");
+           cacheStores.setText("Stores: ?");
+           serverUptime.setText("Server uptime: ?");
+           statLabel.setText("Not connected to Infinispan. Stats refreshed at " + new Date().toString());
        }
 
     }

@@ -11,10 +11,13 @@ public class InfinispanAdapter {
 
     RemoteCache<Object,Object> cache;
 
+    final String infinispanHost;
+
     public InfinispanAdapter(final String infinispanHost) {
         RemoteCacheManager cacheContainer = new RemoteCacheManager(infinispanHost);
         cacheContainer.start();
         cache = cacheContainer.getCache();
+        this.infinispanHost = infinispanHost;
     }
 
     public InfinispanAdapter(final String infinispanHost, final String cacheName) {
@@ -39,4 +42,7 @@ public class InfinispanAdapter {
         cache.stop();
     }
 
+    public String getHost() {
+        return infinispanHost;
+    }
 }
