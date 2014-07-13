@@ -1,4 +1,4 @@
-package org.zenworks.common;
+package org.zenworks.common.config;
 
 import java.util.HashMap;
 import java.util.Map;

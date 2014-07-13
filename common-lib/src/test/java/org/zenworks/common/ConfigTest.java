@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.testng.annotations.Test;
+import org.zenworks.common.config.Config;
 
 public class ConfigTest {
 	

@@ -3,6 +3,8 @@ package org.zenworks.common;
 import static org.testng.AssertJUnit.assertArrayEquals;
 import static org.testng.AssertJUnit.assertEquals;
 import org.testng.annotations.Test;
+import org.zenworks.common.config.Config;
+import org.zenworks.common.config.ConfigFactory;
 
 public class ConfigFactoryTest {
 	

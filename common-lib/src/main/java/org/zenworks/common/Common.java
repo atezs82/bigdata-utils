@@ -1,5 +1,8 @@
 package org.zenworks.common;
 
+import org.zenworks.common.config.Config;
+import org.zenworks.common.config.ConfigFactory;
+
 import java.util.Map;
 
 public class Common {
