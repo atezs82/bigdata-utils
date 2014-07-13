@@ -14,12 +14,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-/**
- * Created by eatttth on 7/10/2014.
- */
 public class MessageDialog {
 
-    void show(String message, final Image image1, final Image image2) {
+    public void show(String message, final Image image1, final Image image2) {
 
         final Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.WINDOW_MODAL);
