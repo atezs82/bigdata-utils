@@ -18,11 +18,22 @@
         </Button>
     <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0" />
     <ComboBox fx:id="ipanKey" editable="true" prefWidth="150.0" />
-    <Button fx:id="queryButton" disable="true" mnemonicParsing="false" onAction="#onQueryKey" text="Query simple key">
+    <Button fx:id="queryButton" disable="true" mnemonicParsing="false" onAction="#onQueryKey" text="Get">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
     </Button>
+    <Button fx:id="putButton" disable="true" mnemonicParsing="false" onAction="#onPutKey" text="Put">
+        <font>
+            <Font name="System Bold" size="12.0" />
+        </font>
+    </Button>
+    <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteKey" text="Delete">
+        <font>
+            <Font name="System Bold" size="12.0" />
+        </font>
+    </Button>
+
     <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="5.0" />
     <Button fx:id="refreshButton" disable="true" mnemonicParsing="false" onAction="#onRefreshStats" text="Refresh stats">
 <font>

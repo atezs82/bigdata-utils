@@ -1,9 +1,11 @@
 package org.zenworks.infinispan.inquisitor;
 
 import com.sun.corba.se.impl.orbutil.ObjectWriter;
+import org.apache.lucene.search.Query;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.ServerStatistics;
+import org.infinispan.query.Search;
 
 import java.util.Map;
 
@@ -34,6 +36,8 @@ public class InfinispanAdapter {
     public void setKey(Object key, Object value) {
         cache.put(key,value);
     }
+
+    public void deleteKey(Object key) { cache.remove(key); }
 
     public Map<String,String> getStats() {
         return cache.stats().getStatsMap();

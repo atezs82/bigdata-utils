@@ -72,6 +72,12 @@ public class InfinispanWindowController {
     @FXML
     private Button refreshStatButton;
 
+    @FXML
+    private Button putButton;
+
+    @FXML
+    private Button deleteButton;
+
     InfinispanAdapter infinispanConnection;
 
     private Timeline refreshTask = null;
@@ -84,7 +90,7 @@ public class InfinispanWindowController {
     @FXML
     void onConnectToIpan(ActionEvent event) {
         infinispanConnection = new InfinispanAdapter(ipanHost.getEditor().getText());
-        enableControls(queryButton, ipanKey, refreshButton,ipanContent);
+        enableControls(queryButton, ipanKey, refreshButton,ipanContent,deleteButton,putButton);
         onRefreshStats(null);
         infinispanConnection.setKey("Toth","Attila");
         infinispanConnection.setKey("Toth2","Attila2");
@@ -92,27 +98,24 @@ public class InfinispanWindowController {
     }
 
     @FXML
-    void onQueryKey() {
-        String queryKey = ipanKey.getEditor().getText();
-        Object value = infinispanConnection.getKey(queryKey);
-        if (value==null) {
-            DialogBox.showMessageDialog("Key `"+queryKey+"` could not be found in Infinispan.");
-        } else {
-            ipanContent.setText((String) value);
-        }
-        if (!ipanKey.getItems().contains(queryKey)) {
-           ipanKey.getItems().add(queryKey);
-        }
-    }
-
-    @FXML
     void onQueryKey(ActionEvent event) {
-       if (infinispanConnection != null) {
-           ipanContent.setText(infinispanConnection.getKey(ipanKey.getEditor().getText()).toString());
-           if (!ipanKey.getEditor().getText().isEmpty()) {
-               ipanKey.getItems().add(ipanKey.getEditor().getText());
-           }
-       }
+        if (infinispanConnection != null) {
+            String queryKey = ipanKey.getEditor().getText();
+            try {
+                Object value = infinispanConnection.getKey(queryKey);
+
+                if (value == null) {
+                    DialogBox.showMessageDialog("Key `" + queryKey + "` could not be found in Infinispan.");
+                } else {
+                    ipanContent.setText((String) value);
+                }
+            } catch (Exception exc) {
+                DialogBox.showMessageDialog("Sorry. Some problem happened fetching the key. This message might give a clue:\\n" + exc.getMessage());
+            }
+            if (!ipanKey.getItems().contains(queryKey)) {
+                ipanKey.getItems().add(queryKey);
+            }
+        }
     }
 
     @FXML
@@ -121,7 +124,7 @@ public class InfinispanWindowController {
         if (refreshTask == null) {
 
             int duration = Integer.valueOf(refreshStatInterval.getText());
-            refreshTask = new Timeline(new KeyFrame(Duration.millis(duration), new EventHandler<ActionEvent>() {
+            refreshTask = new Timeline(new KeyFrame(Duration.millis(duration*1000), new EventHandler<ActionEvent>() {
 
                 public void handle(ActionEvent arg0) {
                    onRefreshStats(null);
@@ -129,11 +132,11 @@ public class InfinispanWindowController {
             }));
             refreshTask.setCycleCount(Timeline.INDEFINITE);
             refreshTask.play();
-            refreshButton.setText("STOP");
+            refreshStatButton.setText("STOP");
         } else {
             refreshTask.stop();
             refreshTask = null;
-            refreshButton.setText("Start");
+            refreshStatButton.setText("Start");
         }
 
     }
@@ -165,4 +168,13 @@ public class InfinispanWindowController {
 
     }
 
+    public void onDeleteKey(ActionEvent actionEvent) {
+        String queryKey = ipanKey.getEditor().getText();
+        infinispanConnection.deleteKey(queryKey);
+        DialogBox.showMessageDialog("Key `"+queryKey+"` removed from Infinispan.");
+    }
+
+    public void onPutKey(ActionEvent actionEvent) {
+
+    }
 }
