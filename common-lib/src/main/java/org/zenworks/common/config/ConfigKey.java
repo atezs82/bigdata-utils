@@ -1,9 +1,17 @@
 package org.zenworks.common.config;
 
-public class ConfigKey {
-	
-	public static final String ZOOKEEPER_FAVORITES = "zkFav";
-	public static final String REDIS_FAVORITES = "redisFav";
-    public static final String REDIS_INITIAL_WATCH_LIST = "redisWatchList";
+public enum ConfigKey {
+
+    ZOOKEEPER_FAVORITES("zkFav"),
+    REDIS_FAVORITES("redisFav"),
+    REDIS_INITIAL_WATCH_LIST("redisWatchList");
+
+    private String cliParam;
+
+    private ConfigKey(final String cliParam) {
+        this.cliParam=cliParam;
+    }
+
+    public String getCliParam() { return cliParam; }
 
 }
