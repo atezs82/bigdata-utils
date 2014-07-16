@@ -20,31 +20,59 @@ public class Config {
 			return (T)internalConfiguration.get(type.getClass()).get(key);	
 		} else {
 			return null;
-		}		
-		
+		}
 	}
+
+    public <T> T getConfig(T type, ConfigKey key) {
+
+        if (internalConfiguration.containsKey(type.getClass())) {
+            return (T)internalConfiguration.get(type.getClass()).get(key.getCliParam());
+        } else {
+            return null;
+        }
+    }
+
+    public <T> boolean isConfig(T type, String key) {
+        if (internalConfiguration.containsKey(type.getClass())) {
+            return internalConfiguration.get(type.getClass()).containsKey(key);
+        }
+        return false;
+    }
+
+    public <T> boolean isConfig(T type, ConfigKey key) {
+        return isConfig(type, key.getCliParam());
+    }
 	
 	public String getStringConfig(String key) {
 		return getConfig(STRING, key);		
 	}
+
+    public String getStringConfig(ConfigKey key) {
+        return getConfig(STRING, key);
+    }
 	
 	public String[] getStringArrayConfig(String key) {
 		return getConfig(STRING_ARRAY, key);		
-	}			
-
-	public <T> boolean isConfig(T type, String key) {
-		if (internalConfiguration.containsKey(type.getClass())) {
-			return internalConfiguration.get(type.getClass()).containsKey(key);
-		}
-		return false;
 	}
-	
-	public boolean isStringConfig(String key) {
+
+    public String[] getStringArrayConfig(ConfigKey key) {
+        return getConfig(STRING_ARRAY, key);
+    }
+
+    public boolean isStringConfig(String key) {
 		return isConfig(STRING, key);
 	}
+
+    public boolean isStringConfig(ConfigKey key) {
+        return isConfig(STRING, key);
+    }
 	
 	public boolean isStringArrayConfig(String key) {
 		return isConfig(STRING_ARRAY, key);
-	}	
+	}
+
+    public boolean isStringArrayConfig(ConfigKey key) {
+        return isConfig(STRING_ARRAY, key);
+    }
 
 }
