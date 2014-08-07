@@ -16,16 +16,41 @@
     </modules>
 
     <properties>
-    	<testng.version>6.1.1</testng.version>
+    	<testng.version>6.8.8</testng.version>
+        <mockito.version>1.9.5</mockito.version>
+        <powermock.version>1.5.5</powermock.version>
     </properties>
 
 	<dependencies>
+
 	    <dependency>
 			  <groupId>org.testng</groupId>
 			  <artifactId>testng</artifactId>
 			  <version>${testng.version}</version>
 			  <scope>test</scope>
 		</dependency>
-	</dependencies>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-testng</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 	 
 </project>

@@ -19,8 +19,12 @@ public class DialogBox {
     }
 
     public static String showQueryDialog(final String message) {
+        return showQueryDialog(message,"");
+    }
+
+    public static String showQueryDialog(final String message, final String initialText) {
         TextQueryDialog queryDialog = new TextQueryDialog();
-        return queryDialog.show(message, getRandomImage(), getRandomImage());
+        return queryDialog.show(message, initialText, getRandomImage(), getRandomImage());
     }
 
     public static Image getRandomImage() {

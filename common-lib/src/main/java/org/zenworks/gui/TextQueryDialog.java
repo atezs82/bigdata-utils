@@ -19,13 +19,14 @@ public class TextQueryDialog {
 
     String result = null;
 
-    public String show(final String message, final Image image1, final Image image2) {
+    public String show(final String message, final String initialContent, final Image image1, final Image image2) {
 
         final Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.WINDOW_MODAL);
         Button okButton = new Button("Ok");
         Button cancelButton = new Button("Cancel");
         final TextField inputField = new TextField();
+        inputField.setText(initialContent);
         okButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent actionEvent) {

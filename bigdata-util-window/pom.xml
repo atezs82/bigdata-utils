@@ -17,24 +17,48 @@
 			<groupId>org.zenworks</groupId>
 			<artifactId>redis-buddy</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>javafx</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 	  		
   		<dependency>
   		   <groupId>org.zenworks</groupId>
   		   <artifactId>zookeeper-explorer</artifactId>
-  		   <version>${project.version}</version>  		  
+  		   <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>javafx</artifactId>
+                </exclusion>
+            </exclusions>
   		</dependency>
 
         <dependency>
             <groupId>org.zenworks</groupId>
             <artifactId>infinispan-inquisitor</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>javafx</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.zenworks</groupId>
             <artifactId>common-lib</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>javafx</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
   		  		  		
@@ -73,6 +97,7 @@
 				</configuration>
 				
 			</plugin>
+
 	     			
 		 </plugins>
 	</build>
