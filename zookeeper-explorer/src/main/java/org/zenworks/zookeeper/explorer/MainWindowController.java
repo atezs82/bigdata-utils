@@ -10,6 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.curator.framework.CuratorFramework;
@@ -28,6 +29,11 @@ import org.zenworks.gui.DialogBox;
 import org.zenworks.gui.DialogResult;
 import org.zenworks.gui.GuiUtils;
 
+// DONE Refresh does not work for the tree
+// TODO ComboBox change does not make the tree change (not always)
+// DONE That might be a problem with the refresh (if a node is added in the background it does not show up as changed).
+// DONE Vezerlok letiltesa ha ZKhoz kapcsolodunk ujra (Refresh)
+// TODO Dialógusablak a GUI mögé megy néha, nem lehet látni az ablakot a nagyobb ablaktól.
 public class MainWindowController implements Initializable {
 
 	@FXML
@@ -78,6 +84,11 @@ public class MainWindowController implements Initializable {
     @FXML
     Label statLabel;
 
+    @FXML
+    Button findButton;
+
+    private String lastSearchQuery="";
+
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
 		if (Common.getConfig().isStringArrayConfig(ConfigKey.ZOOKEEPER_FAVORITES)) {
@@ -92,11 +103,7 @@ public class MainWindowController implements Initializable {
 	 		   onConnect();
 	 		}
 		}
-		
- 		
- 		
- 		
- 		
+
  		zkTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<ZooKeeperNode>>() {
 
 			public void changed(ObservableValue<? extends TreeItem<ZooKeeperNode>> arg0, TreeItem<ZooKeeperNode> arg1,
@@ -129,8 +136,7 @@ public class MainWindowController implements Initializable {
         statLabel.setText("Not connected.");
 		
 	}
-	
-		
+
 	@FXML
 	private void onNew() {
 	   String rootWithSlash = (pathInTree==INVALID?"/":pathInTree+"/");
@@ -226,7 +232,12 @@ public class MainWindowController implements Initializable {
 
 	@FXML
 	private void onRefresh() {
+
+        final String zkAddress = zkConnectString.getEditor().getText();
+        GuiUtils.disableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, findButton, zkTree, content);
+        statLabel.setText("Refreshing content from " + zkAddress + "...");
         refreshTree();
+        statLabel.setText("Content from " + zkAddress + " had been refreshed.");
 	}
 	
 	@FXML
@@ -256,7 +267,7 @@ public class MainWindowController implements Initializable {
                    refreshTree();
                    statLabel.setText("Restored connection to ZooKeeper at " + zkAddress + ".");
                } else if (connectionState == ConnectionState.LOST || connectionState == ConnectionState.SUSPENDED) {
-                   GuiUtils.disableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, zkTree, content);
+                   GuiUtils.disableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, findButton, zkTree, content);
                    statLabel.setText("Lost connection to ZooKeeper at " + zkAddress + ". Please connect again.");
                }
             }
@@ -302,7 +313,7 @@ public class MainWindowController implements Initializable {
 		zkTree.setRoot(createTree("", adapter.getChildren("/")));
 		pathInTree=INVALID;
 		zkTree.getSelectionModel().select(lastSelection);
-        GuiUtils.enableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, zkTree, content);
+        GuiUtils.enableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, findButton, zkTree, content);
 
 	}
 	
@@ -317,4 +328,22 @@ public class MainWindowController implements Initializable {
 		return node;
 	}
 
+    public void onFind(ActionEvent actionEvent) {
+        String findText = DialogBox.showQueryDialog("Find substring:", lastSearchQuery);
+
+        if (findText != null || findText != "") {
+            String contentStr = content.getText();
+            System.out.println("Caret position was " + content.getCaretPosition());
+
+            int nextMatch = contentStr.indexOf(findText,content.getCaretPosition());
+            System.out.println("Next match found at " + nextMatch);
+            if (nextMatch == -1) {
+                DialogBox.showMessageDialog("Text `"+findText+"` could not be found.");
+            } else {
+                System.out.println("Set select range to " + (nextMatch - findText.length()) + " to " + nextMatch);
+                content.selectRange(nextMatch, nextMatch - findText.length());
+            }
+
+        }
+    }
 }

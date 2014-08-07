@@ -22,6 +22,7 @@ public class ZooKeeperAdapter {
     public ZooKeeperAdapter(final String connectString, final ConnectionStateListener listener) {
         this.connectString = connectString;
         this.listener = listener;
+
     }
 
     public void init() {
