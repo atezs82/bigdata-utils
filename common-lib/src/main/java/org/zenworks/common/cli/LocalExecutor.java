@@ -4,8 +4,9 @@ import java.io.*;
 
 public class LocalExecutor implements CliExecutor {
     @Override
-    public void connect() {
+    public CliExecutor connect() {
        // native API does not require this
+        return this;
     }
 
     @Override
@@ -27,7 +28,8 @@ public class LocalExecutor implements CliExecutor {
     }
 
     @Override
-    public void disconnect() {
+    public CliExecutor disconnect() {
        // native API does not require this
+        return this;
     }
 }

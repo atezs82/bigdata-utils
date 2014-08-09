@@ -22,8 +22,9 @@ public class SshExecutor implements CliExecutor {
     }
 
     @Override
-    public void connect() {
-
+    public CliExecutor connect() {
+        // connect to server
+        return this;
     }
 
     @Override
@@ -63,7 +64,7 @@ public class SshExecutor implements CliExecutor {
     }
 
     @Override
-    public void disconnect() {
-
+    public CliExecutor disconnect() {
+        return this;
     }
 }

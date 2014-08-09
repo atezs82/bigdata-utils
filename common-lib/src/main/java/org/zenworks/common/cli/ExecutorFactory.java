@@ -7,7 +7,7 @@ public class ExecutorFactory {
         return null;
     }
 
-    public static CliExecutor getExecuorTowards(final String host, final String user, final String password) {
+    public static CliExecutor getExecutorTowards(final String host, final String user, final String password) {
         return null;
     }
 }
