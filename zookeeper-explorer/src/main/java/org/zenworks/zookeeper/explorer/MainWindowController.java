@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -86,6 +87,9 @@ public class MainWindowController implements Initializable {
 
     @FXML
     Button findButton;
+
+    @FXML
+    Button findNextButton;
 
     private String lastSearchQuery="";
 
@@ -234,7 +238,7 @@ public class MainWindowController implements Initializable {
 	private void onRefresh() {
 
         final String zkAddress = zkConnectString.getEditor().getText();
-        GuiUtils.disableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, findButton, zkTree, content);
+        GuiUtils.disableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, findButton, findNextButton, zkTree, content);
         statLabel.setText("Refreshing content from " + zkAddress + "...");
         refreshTree();
         statLabel.setText("Content from " + zkAddress + " had been refreshed.");
@@ -267,7 +271,7 @@ public class MainWindowController implements Initializable {
                    refreshTree();
                    statLabel.setText("Restored connection to ZooKeeper at " + zkAddress + ".");
                } else if (connectionState == ConnectionState.LOST || connectionState == ConnectionState.SUSPENDED) {
-                   GuiUtils.disableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, findButton, zkTree, content);
+                   GuiUtils.disableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, findButton, findNextButton, zkTree, content);
                    statLabel.setText("Lost connection to ZooKeeper at " + zkAddress + ". Please connect again.");
                }
             }
@@ -313,7 +317,7 @@ public class MainWindowController implements Initializable {
 		zkTree.setRoot(createTree("", adapter.getChildren("/")));
 		pathInTree=INVALID;
 		zkTree.getSelectionModel().select(lastSelection);
-        GuiUtils.enableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, findButton, zkTree, content);
+        GuiUtils.enableControls(newButton, cloneButton, deleteButton, onRefresh, importButton, exportButton, restoreButton, saveButton, findButton, findNextButton, zkTree, content);
 
 	}
 	
@@ -328,22 +332,42 @@ public class MainWindowController implements Initializable {
 		return node;
 	}
 
+    @FXML
     public void onFind(ActionEvent actionEvent) {
-        String findText = DialogBox.showQueryDialog("Find substring:", lastSearchQuery);
+        final String findText = DialogBox.showQueryDialog("Find substring:", lastSearchQuery);
+        lastSearchQuery = findText;
 
         if (findText != null || findText != "") {
-            String contentStr = content.getText();
-            System.out.println("Caret position was " + content.getCaretPosition());
+            findStringInContentAndSelectIfFound(lastSearchQuery);
+        }
+    }
 
-            int nextMatch = contentStr.indexOf(findText,content.getCaretPosition());
-            System.out.println("Next match found at " + nextMatch);
-            if (nextMatch == -1) {
-                DialogBox.showMessageDialog("Text `"+findText+"` could not be found.");
-            } else {
-                System.out.println("Set select range to " + (nextMatch - findText.length()) + " to " + nextMatch);
-                content.selectRange(nextMatch, nextMatch - findText.length());
-            }
+    @FXML
+    public void onFindNext(ActionEvent event) {
+
+        if (lastSearchQuery.isEmpty()) {
+            DialogBox.showMessageDialog("There was no previous search or it was empty.");
+        } else {
+            findStringInContentAndSelectIfFound(lastSearchQuery);
+        }
+
+    }
+
+    private void findStringInContentAndSelectIfFound(final String findText) {
+        String contentStr = content.getText();
+
+        final int nextMatch = contentStr.indexOf(findText,content.getCaretPosition());
+        if (nextMatch == -1) {
+            DialogBox.showMessageDialog("Text `"+findText+"` could not be found starting from caret position.");
+        } else {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    content.selectRange(nextMatch, nextMatch + findText.length());
+                }
+            });
 
         }
+
     }
 }
