@@ -6,7 +6,11 @@
     	 <version>0.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
+    <modules>
+        <module>../hazecast-harasser</module>
+        <module>../storm-stewer</module>
+    </modules>
     <groupId>org.zenworks</groupId>
     <artifactId>bigdata-util</artifactId>
     <version>0.1-SNAPSHOT</version>
@@ -40,6 +44,32 @@
         <dependency>
             <groupId>org.zenworks</groupId>
             <artifactId>infinispan-inquisitor</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>javafx</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.zenworks</groupId>
+            <artifactId>hazelcast-harasser</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>javafx</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.zenworks</groupId>
+            <artifactId>storm-stewer</artifactId>
             <version>${project.version}</version>
             <exclusions>
                 <exclusion>

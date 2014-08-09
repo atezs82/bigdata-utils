@@ -8,7 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.zenworks.common.config.Config;
 import org.zenworks.common.module.FrameworkModule;
+import org.zenworks.hazelcast.harasser.HazelcastHarasserMain;
 import org.zenworks.infinispan.inquisitor.InfinispanMainWindow;
+import org.zenworks.storm.stewer.StormStewerMain;
 import org.zenworks.zookeeper.explorer.MainWindow;
 
 import javafx.fxml.FXML;
@@ -24,7 +26,7 @@ public class MainWindowController implements Initializable {
 	TabPane tabPane;
 	
 	public void initialize(URL arg0, ResourceBundle arg1) {
-        FrameworkModule[] modules = new FrameworkModule[]{ new MainWindow(), new org.zenworks.redis.buddy.MainWindow(), new InfinispanMainWindow() };
+        FrameworkModule[] modules = new FrameworkModule[]{ new MainWindow(), new org.zenworks.redis.buddy.MainWindow(), new InfinispanMainWindow(), new HazelcastHarasserMain(), new StormStewerMain() };
 
         for (FrameworkModule fm : modules) {
             tabPane.getTabs().add(createTab(fm.getName(), fm.getIcon(), fm.getInterface()));
