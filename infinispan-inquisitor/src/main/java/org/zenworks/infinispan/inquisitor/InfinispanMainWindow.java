@@ -10,7 +10,12 @@ import org.zenworks.common.Common;
 import org.zenworks.common.module.FrameworkModule;
 
 import java.io.IOException;
-
+/*
+TODO: shall attempt to determine basic object types
+shall guess basic content (much like as taprint bolt does)
+"add DTO jar" support (to support retrieval of any class)
+fetch list of keys somehow (?) no remotecache support
+ */
 public class InfinispanMainWindow extends Application implements FrameworkModule {
 
     public static void main(String[] args) {
