@@ -144,7 +144,6 @@ public class MainWindowController implements Initializable {
         content.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-               System.out.println(keyEvent.toString());
                if (keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.F && !content.isDisabled()) {
                    onFind(null);
                }
