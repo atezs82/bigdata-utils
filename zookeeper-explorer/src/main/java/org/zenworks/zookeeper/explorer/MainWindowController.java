@@ -12,7 +12,11 @@ import javax.swing.JOptionPane;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import org.apache.commons.io.FileUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.state.ConnectionState;
@@ -137,6 +141,15 @@ public class MainWindowController implements Initializable {
 		});
 		zkTree.setEditable(false);      
 		content.setDisable(false);
+        content.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+               System.out.println(keyEvent.toString());
+               if (keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.F && !content.isDisabled()) {
+                   onFind(null);
+               }
+            }
+        });
         statLabel.setText("Not connected.");
 		
 	}
