@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.text.Text;
@@ -44,6 +46,15 @@ public class ConfirmationDialog {
         ImageView imageView2 = new ImageView(image2);
         imageView2.setPreserveRatio(true);
         imageView2.setFitWidth(64.0);
+        dialogStage.addEventFilter(KeyEvent.KEY_PRESSED,new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                    dialogStage.close();
+                    result=DialogResult.NO;
+                }
+            }
+        });
         dialogStage.setScene(new Scene(VBoxBuilder.create().
                 children(HBoxBuilder.create().children(imageView1, new Text(message), imageView2).alignment(Pos.CENTER).padding(new Insets(25)).build(),
                         HBoxBuilder.create().children(yesButton,noButton).spacing(5.0).alignment(Pos.CENTER).build()).

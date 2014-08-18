@@ -1,6 +1,7 @@
 package org.zenworks.gui;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBoxBuilder;
 import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.text.Text;
@@ -38,7 +41,7 @@ public class TextQueryDialog {
             @Override
             public void handle(javafx.event.ActionEvent actionEvent) {
                 dialogStage.close();
-                result=inputField.getText();
+
             }
         });
         ImageView imageView1 = new ImageView(image1);
@@ -48,6 +51,16 @@ public class TextQueryDialog {
         imageView2.setPreserveRatio(true);
         imageView2.setFitWidth(64.0);
 
+        dialogStage.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    dialogStage.close();
+                    result = inputField.getText();
+                }
+            }
+        });
+
         dialogStage.setScene(new Scene(VBoxBuilder.create().
                 children(HBoxBuilder.create().children(imageView1, new Text(message), inputField, imageView2).alignment(Pos.CENTER).spacing(5.0).padding(new Insets(25)).build(),
                         HBoxBuilder.create().children(okButton,cancelButton).spacing(5.0).alignment(Pos.CENTER).build()).
@@ -55,6 +68,8 @@ public class TextQueryDialog {
         dialogStage.setResizable(false);
         dialogStage.setTitle("Query");
         dialogStage.showAndWait();
+
+        inputField.requestFocus();
 
         return result;
     }
