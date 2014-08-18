@@ -1,4 +1,4 @@
-package org.zenworks.common;
+package org.zenworks.common.log;
 
 public interface Logger {
 	

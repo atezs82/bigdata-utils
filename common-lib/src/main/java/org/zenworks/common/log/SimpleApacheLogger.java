@@ -1,6 +1,4 @@
-package org.zenworks.common;
-
-import org.apache.log4j.spi.LoggerFactory;
+package org.zenworks.common.log;
 
 public class SimpleApacheLogger implements Logger {
 	

@@ -2,6 +2,7 @@ package org.zenworks.common.cli;
 
 
 import com.jcraft.jsch.*;
+import javafx.util.Callback;
 import netscape.javascript.JSException;
 
 import java.io.ByteArrayInputStream;
@@ -61,6 +62,11 @@ public class SshExecutor implements CliExecutor {
             e.printStackTrace();
         }*/
         return null;
+    }
+
+    @Override
+    public void executeCommandAsync(String command, ExecutorCallback callback) {
+
     }
 
     @Override
