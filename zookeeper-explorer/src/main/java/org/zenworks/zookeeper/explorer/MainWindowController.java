@@ -95,7 +95,8 @@ public class MainWindowController implements Initializable {
     @FXML
     Button findNextButton;
 
-    private String lastSearchQuery="";
+    private final String EMPTY = "";
+    private String lastSearchQuery = EMPTY;
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
@@ -349,7 +350,7 @@ public class MainWindowController implements Initializable {
         final String findText = DialogBox.showQueryDialog("Find substring:", lastSearchQuery);
         lastSearchQuery = findText;
 
-        if (findText != null || findText != "") {
+        if (findText != null || !findText.equals(EMPTY)) {
             findStringInContentAndSelectIfFound(lastSearchQuery);
         }
     }
@@ -357,7 +358,7 @@ public class MainWindowController implements Initializable {
     @FXML
     public void onFindNext(ActionEvent event) {
 
-        if (lastSearchQuery.isEmpty()) {
+        if (lastSearchQuery.equals(EMPTY)) {
             DialogBox.showMessageDialog("There was no previous search or it was empty.");
         } else {
             findStringInContentAndSelectIfFound(lastSearchQuery);
