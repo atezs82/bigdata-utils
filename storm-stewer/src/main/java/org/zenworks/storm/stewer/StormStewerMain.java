@@ -47,6 +47,6 @@ public class StormStewerMain extends Application implements FrameworkModule {
 
     @Override
     public String getName() {
-        return "Storm Sewer";
+        return "Storm Stewer";
     }
 }

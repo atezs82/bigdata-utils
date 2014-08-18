@@ -1,10 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.zenworks.storm.stewer.MainWindowController">
-    <top>
-        <Label fx:id="numOfEntries" text="Hazelcast Harasser future content" />
-    </top>
+   <top>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <items>
+            <TextArea fx:id="stormDir" prefHeight="0.0" prefWidth="200.0" />
+            <Button fx:id="startLogWatch" mnemonicParsing="false" onAction="#onStartLogWatch" text="Start Watching Logs" />
+         </items>
+      </ToolBar>
+   </top>
+   <center>
+      <GridPane fx:id="logGrid" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextArea fx:id="nimbus" prefHeight="200.0" prefWidth="200.0" />
+            <TextArea fx:id="supervisor" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" />
+            <TextArea fx:id="worker" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+            <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" />
+            <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+   </center>
+   <bottom>
+      <BorderPane prefHeight="24.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+         <left>
+            <Label fx:id="statLabel" text="Ready." BorderPane.alignment="CENTER" />
+         </left>
+      </BorderPane>
+   </bottom>
 </BorderPane>
