@@ -219,7 +219,6 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void onContentChange() {
 		contentChange.setVisible(true);
-		
 	}
 	
 	@FXML

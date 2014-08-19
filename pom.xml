@@ -16,9 +16,10 @@
     </modules>
 
     <properties>
-    	<testng.version>6.8.8</testng.version>
-        <mockito.version>1.9.5</mockito.version>
-        <powermock.version>1.5.5</powermock.version>
+    	<testng.version>6.8.5</testng.version>
+        <mockito.version>1.9.0</mockito.version>
+        <powermock.version>1.4.12</powermock.version>
+        <javassist.version>3.18.1-GA</javassist.version>
     </properties>
 
 	<dependencies>
@@ -50,6 +51,14 @@
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 	 
