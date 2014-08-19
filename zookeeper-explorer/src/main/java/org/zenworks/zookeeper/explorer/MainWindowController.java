@@ -36,6 +36,7 @@ import org.zenworks.gui.GuiUtils;
 
 // DONE Refresh does not work for the tree
 // TODO ComboBox change does not make the tree change (not always)
+// TODO combobox change or refresh press shall enable the connect button again
 // DONE That might be a problem with the refresh (if a node is added in the background it does not show up as changed).
 // DONE Vezerlok letiltesa ha ZKhoz kapcsolodunk ujra (Refresh)
 // TODO Dialógusablak a GUI mögé megy néha, nem lehet látni az ablakot a nagyobb ablaktól.
