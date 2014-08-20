@@ -1,103 +1,81 @@
 package org.zenworks.zookeeper.explorer;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Font;
+import javafx.util.Callback;
 import org.apache.commons.io.FileUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.state.ConnectionState;
 import org.apache.curator.framework.state.ConnectionStateListener;
 import org.zenworks.common.Common;
 import org.zenworks.common.config.ConfigKey;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.image.ImageView;
-import javafx.util.Callback;
 import org.zenworks.gui.DialogBox;
 import org.zenworks.gui.DialogResult;
 import org.zenworks.gui.GuiUtils;
 
-// DONE Refresh does not work for the tree
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
+
 // TODO ComboBox change does not make the tree change (not always)
 // TODO combobox change or refresh press shall enable the connect button again
-// DONE That might be a problem with the refresh (if a node is added in the background it does not show up as changed).
-// DONE Vezerlok letiltesa ha ZKhoz kapcsolodunk ujra (Refresh)
 // TODO Dialógusablak a GUI mögé megy néha, nem lehet látni az ablakot a nagyobb ablaktól.
 public class MainWindowController implements Initializable {
 
-	@FXML
-	private TreeView<ZooKeeperNode> zkTree;
-	
-	@FXML
-	private TextArea content;
-
-    @FXML
-    private Button connectButton;
-	
-	@FXML
-	private ComboBox<String> zkConnectString;
-	
-	ZooKeeperAdapter adapter = null;
-	
-	String pathInTree=INVALID;
-	
-	final static String INVALID="";
-	
-	@FXML
-	private ImageView contentChange;
-
-    @FXML
-    Button newButton;
-
-    @FXML
-    Button cloneButton;
-
-    @FXML
-    Button deleteButton;
-
-    @FXML
-    Button onRefresh;
-
-    @FXML
-    Button importButton;
-
-    @FXML
-    Button exportButton;
-
-    @FXML
-    Button restoreButton;
-
-    @FXML
-    Button saveButton;
-
-    @FXML
-    Label statLabel;
-
-    @FXML
-    Button findButton;
-
-    @FXML
-    Button findNextButton;
-
+    final static String INVALID = "";
+    String pathInTree = INVALID;
     private final String EMPTY = "";
     private String lastSearchQuery = EMPTY;
+    ZooKeeperAdapter adapter = null;
+    @FXML
+    Button newButton;
+    @FXML
+    Button cloneButton;
+    @FXML
+    Button deleteButton;
+    @FXML
+    Button onRefresh;
+    @FXML
+    Button importButton;
+    @FXML
+    Button exportButton;
+    @FXML
+    Button restoreButton;
+    @FXML
+    Button saveButton;
+    @FXML
+    Label statLabel;
+    @FXML
+    Button findButton;
+    @FXML
+    Button findNextButton;
+    @FXML
+    private TreeView<ZooKeeperNode> zkTree;
+    @FXML
+    private TextArea content;
+    @FXML
+    private Button connectButton;
+    @FXML
+    private ComboBox<String> zkConnectString;
+    @FXML
+    private ImageView contentChange;
+    private double actualFontSize = Font.getDefault().getSize();
+    private double ZOOM_FACTOR = 1.25;
+    private int MAX_ZOOM_COUNT = 5;
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
@@ -382,5 +360,20 @@ public class MainWindowController implements Initializable {
 
         }
 
+    }
+
+    public void onZoomIn(ActionEvent actionEvent) {
+        actualFontSize = (actualFontSize >= Font.getDefault().getSize() * Math.pow(ZOOM_FACTOR, MAX_ZOOM_COUNT) ? actualFontSize : actualFontSize * ZOOM_FACTOR);
+        content.setStyle("-fx-font-size: " + actualFontSize + ";");
+    }
+
+    public void onZoomOut(ActionEvent actionEvent) {
+        actualFontSize = (actualFontSize <= Font.getDefault().getSize() * Math.pow(1.0 / ZOOM_FACTOR, MAX_ZOOM_COUNT) ? actualFontSize : actualFontSize / ZOOM_FACTOR);
+        content.setStyle("-fx-font-size: " + actualFontSize + ";");
+    }
+
+    public void onZoomDefault(ActionEvent actionEvent) {
+        actualFontSize = Font.getDefault().getSize();
+        content.setStyle("-fx-font-size: " + actualFontSize + ";");
     }
 }
