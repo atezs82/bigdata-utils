@@ -31,6 +31,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+// TODO do startscripts for all components
+// TODO compile without javafx system dependency in POM
 // TODO ComboBox change does not make the tree change (not always)
 // TODO combobox change or refresh press shall enable the connect button again
 // TODO Dialógusablak a GUI mögé megy néha, nem lehet látni az ablakot a nagyobb ablaktól.
