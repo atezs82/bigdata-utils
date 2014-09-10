@@ -175,18 +175,22 @@ public class MainWindowController implements Initializable {
 	private void onImport() {
 		 JFileChooser fileChooser = new JFileChooser();
 		 fileChooser.showDialog(null, "Import");
-		 try {
-			 File importFile = fileChooser.getSelectedFile();
-             byte[] fileContent = FileUtils.readFileToByteArray(importFile);
-             String importNode = JOptionPane.showInputDialog(null, "What shall be the name of the new node under `" + (pathInTree == INVALID ? "/" : pathInTree) + "`?");
-		     String targetPath = (pathInTree==INVALID?"/"+importNode:pathInTree+"/"+importNode);
-			 adapter.createNode(targetPath,fileContent);
-             DialogBox.showConfirmationDialog(importFile.getAbsolutePath() + " was imported to " + targetPath);
-			 refreshTree();			 
-		 } catch (IOException exc) {
-             DialogBox.showConfirmationDialog("Could not import file.");
-		 }	 
-	   
+         File importFile = fileChooser.getSelectedFile();
+         if (importFile.isDirectory()) {
+             // upload directory
+         } else {
+             try {
+                 byte[] fileContent = FileUtils.readFileToByteArray(importFile);
+                 String importNode = JOptionPane.showInputDialog(null, "What shall be the name of the new node under `" + (pathInTree == INVALID ? "/" : pathInTree) + "`?");
+                 String targetPath = (pathInTree == INVALID ? "/" + importNode : pathInTree + "/" + importNode);
+                 adapter.createNode(targetPath, fileContent);
+                 DialogBox.showConfirmationDialog(importFile.getAbsolutePath() + " was imported to " + targetPath);
+                 refreshTree();
+             } catch (IOException exc) {
+                 DialogBox.showConfirmationDialog("Could not import file.");
+             }
+         }
+
 	}
 	
 	@FXML
@@ -194,15 +198,19 @@ public class MainWindowController implements Initializable {
 		 JFileChooser fileChooser = new JFileChooser();
 		 fileChooser.showDialog(null, "Export");
 		 File exportFile = fileChooser.getSelectedFile();
-		 if (pathInTree!=INVALID) {
-			 try {
-                 FileUtils.writeByteArrayToFile(exportFile, adapter.getNodeDataBytes(pathInTree));
-                 DialogBox.showConfirmationDialog(pathInTree + " was exported to " + exportFile.getAbsolutePath());
-			 } catch (IOException exc) {
-                 DialogBox.showConfirmationDialog("Could not export file.");
-			 }
-		 }
-		
+         if(exportFile.isDirectory()) {
+             // export directory
+         } else {
+             if (pathInTree != INVALID) {
+                 try {
+                     FileUtils.writeByteArrayToFile(exportFile, adapter.getNodeDataBytes(pathInTree));
+                     DialogBox.showConfirmationDialog(pathInTree + " was exported to " + exportFile.getAbsolutePath());
+                 } catch (IOException exc) {
+                     DialogBox.showConfirmationDialog("Could not export file.");
+                 }
+             }
+         }
+
 	}
 	
 	@FXML
