@@ -93,6 +93,14 @@ public class MainWindowController implements Initializable {
 	 		   onConnect();
 	 		}
 		}
+        zkConnectString.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    onConnect();
+                }
+            }
+        });
 
  		zkTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<ZooKeeperNode>>() {
 
@@ -253,7 +261,12 @@ public class MainWindowController implements Initializable {
 	private void onConnect() {
         connectButton.setDisable(true);
         final String zkAddress = zkConnectString.getEditor().getText();
-        statLabel.setText("Connecting to " + zkAddress + "...");
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                statLabel.setText("Connecting to " + zkAddress + "...");
+            }
+        });
         if (adapter!=null) {
             adapter.disconnect();
         }
