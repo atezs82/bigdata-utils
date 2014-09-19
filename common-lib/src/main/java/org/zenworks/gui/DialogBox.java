@@ -27,6 +27,12 @@ public class DialogBox {
         return queryDialog.show(message, initialText, getRandomImage(), getRandomImage());
     }
 
+    public static TextProgressCallback showTextProgressDialog(String dialogCaption) {
+        TextProgressDialog progressDialog = new TextProgressDialog();
+
+        return progressDialog.show(dialogCaption, getRandomImage());
+    }
+
     public static Image getRandomImage() {
        int randomIndex = (int)(Math.random()*5.0);
 
@@ -40,4 +46,5 @@ public class DialogBox {
 
     }
 
+    
 }
