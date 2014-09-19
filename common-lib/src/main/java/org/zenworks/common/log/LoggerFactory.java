@@ -9,4 +9,8 @@ public class LoggerFactory {
         return new SimpleApacheLogger(component, clazz);
     }
 
+    public static Logger getConsoleLogger(String component, Class clazz) {
+        return new ConsoleLogger(component, clazz);
+    }
+
 }
