@@ -19,10 +19,12 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.state.ConnectionState;
 import org.apache.curator.framework.state.ConnectionStateListener;
 import org.zenworks.common.Common;
+import org.zenworks.common.FileLister;
 import org.zenworks.common.config.ConfigKey;
 import org.zenworks.gui.DialogBox;
 import org.zenworks.gui.DialogResult;
 import org.zenworks.gui.GuiUtils;
+import org.zenworks.gui.TextProgressCallback;
 
 import javax.swing.*;
 import java.io.File;
@@ -36,6 +38,7 @@ import java.util.ResourceBundle;
 // TODO ComboBox change does not make the tree change (not always)
 // TODO combobox change or refresh press shall enable the connect button again
 // TODO Dialógusablak a GUI mögé megy néha, nem lehet látni az ablakot a nagyobb ablaktól.
+// TODO import and export directories functionality
 public class MainWindowController implements Initializable {
 
     final static String INVALID = "";
@@ -140,7 +143,7 @@ public class MainWindowController implements Initializable {
             }
         });
         statLabel.setText("Not connected.");
-		
+
 	}
 
 	@FXML
@@ -170,14 +173,46 @@ public class MainWindowController implements Initializable {
 			refreshTree();
 		}				   
 	}
-	
+
 	@FXML
 	private void onImport() {
 		 JFileChooser fileChooser = new JFileChooser();
-		 fileChooser.showDialog(null, "Import");
-         File importFile = fileChooser.getSelectedFile();
+         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		 fileChooser.showDialog(null, "Import file or directory");
+         final File importFile = fileChooser.getSelectedFile();
          if (importFile.isDirectory()) {
-             // upload directory
+             final List<String> files = new FileLister().getListOfFiles(importFile.getAbsolutePath());
+             final String targetPath = (pathInTree == INVALID ? "/" : pathInTree);
+
+             if (DialogBox.showConfirmationDialog("Are you sure you want to import all " + files.size() + " files from under " + importFile.getAbsolutePath() + " to ZooKeeper path " + targetPath) == DialogResult.YES) {
+                 final TextProgressCallback importProgress = DialogBox.showTextProgressDialog("Import progress");
+                 new Thread() {
+                     @Override
+                     public void run() {
+
+                         int filesImported=0;
+                         for (String file:files) {
+                             String pathWithZookeeperSlashes = file.replaceAll("\\\\","/").substring(importFile.getAbsolutePath().length() + 1, file.length());
+                             try {
+                                 byte[] fileContent = FileUtils.readFileToByteArray(new File(file));
+                                 importProgress.appendProgress("Importing " + pathWithZookeeperSlashes + " to under " +targetPath + " (" + fileContent.length + " bytes read)...");
+                                 importProgress.setPercentage((double)filesImported / (double)files.size());
+                                 filesImported += 1;
+                                 adapter.createNode(targetPath + "/" + pathWithZookeeperSlashes, fileContent);
+                             } catch (IOException exc) {
+                                 DialogBox.showConfirmationDialog("Could not import file.");
+                             }
+                         }
+
+                         importProgress.appendProgress("Imported all " + files.size() + " files to " + targetPath + ".");
+                         importProgress.setPercentage(100.0);
+                         importProgress.complete();
+                     }
+                 }.start();
+                 refreshTree();
+
+             }
+
          } else {
              try {
                  byte[] fileContent = FileUtils.readFileToByteArray(importFile);
@@ -190,34 +225,43 @@ public class MainWindowController implements Initializable {
                  DialogBox.showConfirmationDialog("Could not import file.");
              }
          }
-
 	}
 	
 	@FXML
 	private void onExport() {
 		 JFileChooser fileChooser = new JFileChooser();
-		 fileChooser.showDialog(null, "Export");
-		 File exportFile = fileChooser.getSelectedFile();
-         if(exportFile.isDirectory()) {
-             // export directory
-         } else {
-             if (pathInTree != INVALID) {
-                 try {
-                     FileUtils.writeByteArrayToFile(exportFile, adapter.getNodeDataBytes(pathInTree));
-                     DialogBox.showConfirmationDialog(pathInTree + " was exported to " + exportFile.getAbsolutePath());
-                 } catch (IOException exc) {
-                     DialogBox.showConfirmationDialog("Could not export file.");
-                 }
-             }
-         }
+         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		 fileChooser.showDialog(null, "Export to directory");
+		 final File exportFile = fileChooser.getSelectedFile();
+         if (pathInTree != INVALID) {
+             final TextProgressCallback importProgress = DialogBox.showTextProgressDialog("Export progress");
+             final List<String> nodes = adapter.getNodeAndChildrenRecursively(pathInTree);
+             new Thread() {
+                 @Override
+                 public void run() {
 
+                     for(String node:nodes) {
+                         try {
+                             String filePathUnderSelectedDirectory = node.replaceAll("/", File.separator);
+                             byte[] nodeData = adapter.getNodeDataBytes(pathInTree + "/" + node);
+                             importProgress.appendProgress("Exporting node " + node + " to file " + exportFile.getAbsolutePath() + File.separator + filePathUnderSelectedDirectory + " (" + nodeData.length + " bytes)...");
+                             FileUtils.writeByteArrayToFile(new File(exportFile.getAbsolutePath() + File.separator + filePathUnderSelectedDirectory), nodeData);
+                         } catch (IOException exc) {
+                             DialogBox.showMessageDialog("Could not export file.");
+                         }
+                     }
+                 }
+             }.run();
+             importProgress.appendProgress(pathInTree + " was exported to directory " + exportFile.getAbsolutePath() + " (" + nodes.size() + " altogether exported).");
+             importProgress.complete();
+         }
 	}
 	
 	@FXML
 	private void onContentChange() {
 		contentChange.setVisible(true);
 	}
-	
+
 	@FXML
 	private void onRestore() {
 		if (pathInTree!=INVALID && contentChange.isVisible()) {
