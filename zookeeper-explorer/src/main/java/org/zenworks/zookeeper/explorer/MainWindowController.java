@@ -194,11 +194,16 @@ public class MainWindowController implements Initializable {
                          for (String file:files) {
                              String pathWithZookeeperSlashes = file.replaceAll("\\\\","/").substring(importFile.getAbsolutePath().length() + 1, file.length());
                              try {
-                                 byte[] fileContent = FileUtils.readFileToByteArray(new File(file));
-                                 importProgress.appendProgress("Importing " + pathWithZookeeperSlashes + " to under " +targetPath + " (" + fileContent.length + " bytes read)...");
                                  importProgress.setPercentage((double)filesImported / (double)files.size());
                                  filesImported += 1;
-                                 adapter.createNode(targetPath + "/" + pathWithZookeeperSlashes, fileContent);
+                                 if (FileUtils.sizeOf(new File(file)) < 1024*1024) {
+                                     byte[] fileContent = FileUtils.readFileToByteArray(new File(file));
+
+                                     importProgress.appendProgress("Importing " + pathWithZookeeperSlashes + " to under " + targetPath + " (" + fileContent.length + " bytes read)...");
+                                     adapter.createNode(targetPath + "/" + pathWithZookeeperSlashes, fileContent);
+                                 } else {
+                                     importProgress.appendProgress("Could import " + pathWithZookeeperSlashes + ", file is too big (length is " + FileUtils.sizeOf(new File(file)) + " bytes)...");
+                                 }
                              } catch (IOException exc) {
                                  DialogBox.showConfirmationDialog("Could not import file.");
                              }
