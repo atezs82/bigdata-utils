@@ -45,11 +45,12 @@ public class ZooKeeperAdapter {
         }
     }
 
-    public List<String> getNodeAndChildrenRecursively(final String node) {
+    public List<String> getNodeAndChildren(final String node) {
         List<String> result = new ArrayList<String>();
         result.add(node);
+        System.out.println("Exploring node " + node + " Child-count:" + getChildren(node).size());
         for (String child:getChildren(node)) {
-           result.addAll(getChildren(node + "/" + child));
+           result.addAll(getNodeAndChildren(node + "/" + child));
         }
         return result;
     }

@@ -240,7 +240,7 @@ public class MainWindowController implements Initializable {
 		 final File exportFile = fileChooser.getSelectedFile();
          if (pathInTree != INVALID) {
              final TextProgressCallback importProgress = DialogBox.showTextProgressDialog("Export progress");
-             final List<String> nodes = adapter.getNodeAndChildrenRecursively(pathInTree);
+             final List<String> nodes = adapter.getNodeAndChildren(pathInTree);
              new Thread() {
                  @Override
                  public void run() {
@@ -248,11 +248,12 @@ public class MainWindowController implements Initializable {
                      for(String node:nodes) {
                          try {
                              String filePathUnderSelectedDirectory = node.replaceAll("/", File.separator);
-                             byte[] nodeData = adapter.getNodeDataBytes(pathInTree + "/" + node);
-                             importProgress.appendProgress("Exporting node " + node + " to file " + exportFile.getAbsolutePath() + File.separator + filePathUnderSelectedDirectory + " (" + nodeData.length + " bytes)...");
-                             FileUtils.writeByteArrayToFile(new File(exportFile.getAbsolutePath() + File.separator + filePathUnderSelectedDirectory), nodeData);
+                             byte[] nodeData = adapter.getNodeDataBytes(node);
+                             importProgress.appendProgress("Exporting node " + node + " to file " + exportFile.getAbsolutePath() + filePathUnderSelectedDirectory + " (" + nodeData.length  + " bytes)...");
+                             FileUtils.writeByteArrayToFile(new File(exportFile.getAbsolutePath() + filePathUnderSelectedDirectory), nodeData);
                          } catch (IOException exc) {
                              DialogBox.showMessageDialog("Could not export file.");
+
                          }
                      }
                  }
