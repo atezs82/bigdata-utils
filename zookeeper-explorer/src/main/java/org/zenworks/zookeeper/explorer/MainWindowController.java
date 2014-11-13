@@ -45,6 +45,7 @@ public class MainWindowController implements Initializable {
     String pathInTree = INVALID;
     private final String EMPTY = "";
     private String lastSearchQuery = EMPTY;
+    private final long ZK_MAX_ALLOWED = 1024*1024;
     ZooKeeperAdapter adapter = null;
     @FXML
     Button newButton;
@@ -196,13 +197,13 @@ public class MainWindowController implements Initializable {
                              try {
                                  importProgress.setPercentage((double)filesImported / (double)files.size());
                                  filesImported += 1;
-                                 if (FileUtils.sizeOf(new File(file)) < 1024*1024) {
+                                 if (FileUtils.sizeOf(new File(file)) < ZK_MAX_ALLOWED) {
                                      byte[] fileContent = FileUtils.readFileToByteArray(new File(file));
 
                                      importProgress.appendProgress("Importing " + pathWithZookeeperSlashes + " to under " + targetPath + " (" + fileContent.length + " bytes read)...");
                                      adapter.createNode(targetPath + "/" + pathWithZookeeperSlashes, fileContent);
                                  } else {
-                                     importProgress.appendProgress("Could import " + pathWithZookeeperSlashes + ", file is too big (length is " + FileUtils.sizeOf(new File(file)) + " bytes)...");
+                                     importProgress.appendProgress("Could import " + pathWithZookeeperSlashes + ", file is too big (length is " + FileUtils.sizeOf(new File(file)) + " bytes). Maximum allowed is "+ZK_MAX_ALLOWED+" bytes.");
                                  }
                              } catch (IOException exc) {
                                  DialogBox.showConfirmationDialog("Could not import file.");
@@ -231,35 +232,38 @@ public class MainWindowController implements Initializable {
              }
          }
 	}
-	
+
 	@FXML
 	private void onExport() {
 		 JFileChooser fileChooser = new JFileChooser();
          fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		 fileChooser.showDialog(null, "Export to directory");
 		 final File exportFile = fileChooser.getSelectedFile();
+
          if (pathInTree != INVALID) {
-             final TextProgressCallback importProgress = DialogBox.showTextProgressDialog("Export progress");
-             final List<String> nodes = adapter.getNodeAndChildren(pathInTree);
-             new Thread() {
-                 @Override
-                 public void run() {
+             if ((DialogBox.showConfirmationDialog("Are you sure you want to export all content from under " + pathInTree + " to directory " + exportFile.toString())) == DialogResult.YES) {
+                 final TextProgressCallback exportProgress = DialogBox.showTextProgressDialog("Export progress");
+                 final List<String> nodes = adapter.getNodeAndChildren(pathInTree);
+                 new Thread() {
+                     @Override
+                     public void run() {
 
-                     for(String node:nodes) {
-                         try {
-                             String filePathUnderSelectedDirectory = node.replaceAll("/", File.separator);
-                             byte[] nodeData = adapter.getNodeDataBytes(node);
-                             importProgress.appendProgress("Exporting node " + node + " to file " + exportFile.getAbsolutePath() + filePathUnderSelectedDirectory + " (" + nodeData.length  + " bytes)...");
-                             FileUtils.writeByteArrayToFile(new File(exportFile.getAbsolutePath() + filePathUnderSelectedDirectory), nodeData);
-                         } catch (IOException exc) {
-                             DialogBox.showMessageDialog("Could not export file.");
-
+                         for (String node : nodes) {
+                             try {
+                                 String filePathUnderSelectedDirectory = node.replaceAll("/", File.separator);
+                                 byte[] nodeData = adapter.getNodeDataBytes(node);
+                                 exportProgress.appendProgress("Exporting node " + node + " to file " + exportFile.getAbsolutePath() + filePathUnderSelectedDirectory + " (" + nodeData.length + " bytes)...");
+                                 FileUtils.writeByteArrayToFile(new File(exportFile.getAbsolutePath() + filePathUnderSelectedDirectory), nodeData);
+                             } catch (IOException exc) {
+                                 DialogBox.showMessageDialog("Could not export file.");
+                                 exc.printStackTrace();
+                             }
                          }
                      }
-                 }
-             }.run();
-             importProgress.appendProgress(pathInTree + " was exported to directory " + exportFile.getAbsolutePath() + " (" + nodes.size() + " altogether exported).");
-             importProgress.complete();
+                 }.run();
+                 exportProgress.appendProgress(pathInTree + " was exported to directory " + exportFile.getAbsolutePath() + " (" + nodes.size() + " altogether exported).");
+                 exportProgress.complete();
+             }
          }
 	}
 	
@@ -275,12 +279,12 @@ public class MainWindowController implements Initializable {
 				refreshContent();
 				contentChange.setVisible(false);
 			}
-						
-		}		
+
+		}
 	}
 
 	@FXML
-	private void onSave() {		
+	private void onSave() {
 	   if (pathInTree!=INVALID) {
 		  if (contentChange.isVisible()) {
 			  adapter.setNodeData(pathInTree, content.getText());
@@ -291,7 +295,7 @@ public class MainWindowController implements Initializable {
               DialogBox.showMessageDialog("No change. Content not saved.");
 		  }
 	   }
-	}	
+	}
 
 	@FXML
 	private void onRefresh() {
