@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
     <groupId>org.zenworks</groupId>
@@ -20,7 +20,64 @@
         <mockito.version>1.9.0</mockito.version>
         <powermock.version>1.4.12</powermock.version>
         <javassist.version>3.18.1-GA</javassist.version>
+        <external.javafx.version>7.0</external.javafx.version>
+        <external.javafx.groupid>javafx</external.javafx.groupid>
+        <external.javafx.artifactid>javafx</external.javafx.artifactid>
     </properties>
+
+    <profiles>
+
+        <profile>
+
+            <id>target-java7</id>
+
+            <dependencies>
+                <dependency>
+                    <groupId>${external.javafx.groupid}</groupId>
+                    <artifactId>${external.javafx.artifactid}</artifactId>
+                    <version>${external.javafx.version}</version>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>2.3.2</version>
+                        <configuration>
+                            <source>1.7</source>
+                            <target>1.7</target>
+                            <outputFileName>${project.build.finalName}-jdk7</outputFileName>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+
+        <profile>
+
+            <id>target-java8</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>2.3.2</version>
+                        <configuration>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                            <outputFileName>${project.build.finalName}-jdk8</outputFileName>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+
+    </profiles>
 
 	<dependencies>
 
@@ -59,7 +116,20 @@
             <scope>test</scope>
         </dependency>
 
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 	 
 </project>
