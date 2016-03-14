@@ -13,6 +13,7 @@
     	<module>zookeeper-explorer</module>
         <module>infinispan-inquisitor</module>
     	<module>bigdata-util-window</module>
+        <module>hdfs-harvester</module>
     </modules>
 
     <properties>
